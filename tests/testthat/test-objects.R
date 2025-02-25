@@ -22,4 +22,4 @@ test_that("vctrs methods", {
     print(d_tab),
     regexp = "Cars with 8 cylinders"
   )
-}
+})
