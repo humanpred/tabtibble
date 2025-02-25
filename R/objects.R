@@ -22,7 +22,7 @@ new_tab_list <- function(x) {
   x_null <- vapply(X = x, FUN = is.null, FUN.VALUE = TRUE)
   x_df <- vapply(X = x, FUN = inherits, "data.frame", FUN.VALUE = TRUE)
   if (!all(x_null | x_df)) {
-    stop("the contents of 'x' must be NULL or a 'data.frame'-like object")
+    stop("The contents of 'x' must be NULL or a 'data.frame'-like object")
   }
   vctrs::new_vctr(x, class = "tab_list")
 }

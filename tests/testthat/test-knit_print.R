@@ -10,4 +10,8 @@ test_that("knit_print.tab_tibble (and implicitly knit_print.tab_list and print_t
     knit_print(d_tab),
     regexp = "Cars with 8 cylinders"
   )
+  expect_output(
+    suppressWarnings(knit_print(d_tab, tab_prefix = "foo")),
+    regexp = "foo"
+  )
 })

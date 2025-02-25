@@ -8,6 +8,15 @@ test_that("new_tab_tibble", {
 test_that("new_tab_list", {
   new_tl <- new_tab_list(list(data.frame(a = 1)))
   expect_s3_class(new_tl, "tab_list")
+
+  expect_error(
+    new_tab_list("A"),
+    regexp = "`x` must be a list"
+  )
+  expect_error(
+    new_tab_list(list("A")),
+    regexp = "The contents of 'x' must be NULL or a 'data.frame'-like object"
+  )
 })
 
 test_that("vctrs methods", {
@@ -22,4 +31,9 @@ test_that("vctrs methods", {
     print(d_tab),
     regexp = "Cars with 8 cylinders"
   )
+  expect_output(
+    print(d_tab$table),
+    "mpg"
+  )
+  expect_equal(vctrs::vec_ptype_abbr(d_tab$table), "tab_list")
 })
