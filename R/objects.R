@@ -27,6 +27,7 @@ new_tab_list <- function(x) {
   vctrs::new_vctr(x, class = "tab_list")
 }
 
+#' @export
 vec_ptype_abbr.tab_list <- function(x, ...) {
   "tablist"
 }
