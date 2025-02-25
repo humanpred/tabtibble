@@ -34,8 +34,9 @@ d_tab <-
   new_tab_tibble()
 ```
 
-Then, print it!
+Then, print it! You must set `results='asis'` for the chunk printing your
+`tab_tibble`.
 
-```{r print}
+```{r print, results='asis'}
 knit_print(d_tab)
 ```

@@ -6,8 +6,11 @@
 #' @export
 print_tablist_pander <- function(x, caption, ...) {
   auto_asis_start <- pander::panderOptions("knitr.auto.asis")
-  on.exit(pander::panderOptions(knitr.auto.asis = auto_asis_start))
-  pander::panderOptions(knitr.auto.asis = FALSE)
+  on.exit(pander::panderOptions("knitr.auto.asis", auto_asis_start))
+  pander::panderOptions("knitr.auto.asis", FALSE)
+  if (knitr::opts_current$get("results") != "asis") {
+    warning("`tab_list` printing usually requires `results='asis'` on the chunk header")
+  }
 
   pander::pander(x, caption = caption, ...)
 }

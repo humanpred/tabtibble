@@ -26,7 +26,7 @@ knit_print.tab_tibble <- function(x, ...) {
 #' @returns `x` invisibly
 #' @family knitters
 #' @export
-knit_print.tab_list <- function(x, ..., caption, print_fun = pander::pander, tab_prefix = NULL, tab_suffix = "\n\n") {
+knit_print.tab_list <- function(x, ..., caption, print_fun = print_tablist_pander, tab_prefix = NULL, tab_suffix = "\n\n") {
   stopifnot(length(x) == length(caption))
   for (idx in seq_along(x)) {
     if (!is.null(tab_prefix)) {
