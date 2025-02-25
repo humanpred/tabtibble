@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{The \code{tab_tibble} object to print}
+
+\item{...}{Passed to subsequent methods}
 }
 \value{
 \code{x} invisibly

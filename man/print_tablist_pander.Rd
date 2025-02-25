@@ -7,7 +7,14 @@
 print_tablist_pander(x, caption, ...)
 }
 \arguments{
-\item{name}{description}
+\item{x}{A table to print}
+
+\item{caption}{The caption for the table}
+
+\item{...}{Passed to \code{pander::pander}}
+}
+\value{
+The result of \code{pander::pander}
 }
 \description{
 Print a tablist using \code{pander::pander()}

@@ -22,7 +22,24 @@ new_tab_list <- function(x) {
   x_null <- vapply(X = x, FUN = is.null, FUN.VALUE = TRUE)
   x_df <- vapply(X = x, FUN = inherits, "data.frame", FUN.VALUE = TRUE)
   if (!all(x_null | x_df)) {
-    rlang::abort("the contents of 'x' must be NULL or a 'data.frame'-like object")
+    stop("the contents of 'x' must be NULL or a 'data.frame'-like object")
   }
   vctrs::new_vctr(x, class = "tab_list")
+}
+
+vec_ptype_abbr.tab_list <- function(x, ...) {
+  "tablist"
+}
+
+#' @export
+format.tab_list <- function(x, ...) {
+  rep("A tab_list object", length(x))
+}
+
+#' @export
+print.tab_list <- function(x, ...) {
+  for (idx in seq_along(x)) {
+    print(x[[idx]], ...)
+  }
+  invisible(x)
 }

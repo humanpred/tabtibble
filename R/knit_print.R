@@ -5,6 +5,7 @@ knitr::knit_print
 #' Print a tab_tibble
 #'
 #' @param x The `tab_tibble` object to print
+#' @param ... Passed to subsequent methods
 #' @returns `x` invisibly
 #' @family knitters
 #' @export
