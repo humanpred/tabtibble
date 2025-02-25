@@ -1,0 +1,41 @@
+---
+title: "Example Usage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{example-usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(tabtibble)
+```
+
+The `tabtibble` package is typically used to create a list of tables for
+reporting, often in `quarto` or `rmarkdown`.
+
+A simple example is to create a list of tables with each number of cylinders
+grouped together.
+
+```{r example-setup}
+d_tab <-
+  mtcars |>
+  tidyr::nest(table = !"cyl") |>
+  dplyr::mutate(
+    caption = glue::glue("Cars with {cyl} cylinders")
+  ) |>
+  new_tab_tibble()
+```
+
+Then, print it!
+
+```{r print}
+knit_print(d_tab)
+```
