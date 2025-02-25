@@ -27,7 +27,7 @@ new_tab_list <- function(x) {
   vctrs::new_vctr(x, class = "tab_list")
 }
 
-#' @export
+#' @exportS3Method vctrs::vec_ptype_abbr
 vec_ptype_abbr.tab_list <- function(x, ...) {
   "tablist"
 }
