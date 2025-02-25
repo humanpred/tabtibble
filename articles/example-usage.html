@@ -79,10 +79,481 @@ cylinders grouped together.</p>
 <span>    caption <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Cars with {cyl} cylinders"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/new_tab_tibble.html">new_tab_tibble</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Then, print it!</p>
+<p>Then, print it! You must set <code>results='asis'</code> for the
+chunk printing your <code>tab_tibble</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/knit_print.html" class="external-link">knit_print</a></span><span class="op">(</span><span class="va">d_tab</span><span class="op">)</span></span></code></pre></div>
-  </main>
+<table style="width:94%;" class="table">
+<caption>Cars with 6 cylinders</caption>
+<colgroup>
+<col width="9%">
+<col width="11%">
+<col width="8%">
+<col width="9%">
+<col width="11%">
+<col width="11%">
+<col width="6%">
+<col width="6%">
+<col width="9%">
+<col width="9%">
+</colgroup>
+<thead><tr class="header">
+<th align="center">mpg</th>
+<th align="center">disp</th>
+<th align="center">hp</th>
+<th align="center">drat</th>
+<th align="center">wt</th>
+<th align="center">qsec</th>
+<th align="center">vs</th>
+<th align="center">am</th>
+<th align="center">gear</th>
+<th align="center">carb</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="center">21</td>
+<td align="center">160</td>
+<td align="center">110</td>
+<td align="center">3.9</td>
+<td align="center">2.62</td>
+<td align="center">16.46</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">4</td>
+</tr>
+<tr class="even">
+<td align="center">21</td>
+<td align="center">160</td>
+<td align="center">110</td>
+<td align="center">3.9</td>
+<td align="center">2.875</td>
+<td align="center">17.02</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">4</td>
+</tr>
+<tr class="odd">
+<td align="center">21.4</td>
+<td align="center">258</td>
+<td align="center">110</td>
+<td align="center">3.08</td>
+<td align="center">3.215</td>
+<td align="center">19.44</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center">18.1</td>
+<td align="center">225</td>
+<td align="center">105</td>
+<td align="center">2.76</td>
+<td align="center">3.46</td>
+<td align="center">20.22</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center">19.2</td>
+<td align="center">167.6</td>
+<td align="center">123</td>
+<td align="center">3.92</td>
+<td align="center">3.44</td>
+<td align="center">18.3</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">4</td>
+<td align="center">4</td>
+</tr>
+<tr class="even">
+<td align="center">17.8</td>
+<td align="center">167.6</td>
+<td align="center">123</td>
+<td align="center">3.92</td>
+<td align="center">3.44</td>
+<td align="center">18.9</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">4</td>
+<td align="center">4</td>
+</tr>
+<tr class="odd">
+<td align="center">19.7</td>
+<td align="center">145</td>
+<td align="center">175</td>
+<td align="center">3.62</td>
+<td align="center">2.77</td>
+<td align="center">15.5</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">6</td>
+</tr>
+</tbody>
+</table>
+<table style="width:94%;" class="table">
+<caption>Cars with 4 cylinders</caption>
+<colgroup>
+<col width="9%">
+<col width="11%">
+<col width="8%">
+<col width="9%">
+<col width="11%">
+<col width="11%">
+<col width="6%">
+<col width="6%">
+<col width="9%">
+<col width="9%">
+</colgroup>
+<thead><tr class="header">
+<th align="center">mpg</th>
+<th align="center">disp</th>
+<th align="center">hp</th>
+<th align="center">drat</th>
+<th align="center">wt</th>
+<th align="center">qsec</th>
+<th align="center">vs</th>
+<th align="center">am</th>
+<th align="center">gear</th>
+<th align="center">carb</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="center">22.8</td>
+<td align="center">108</td>
+<td align="center">93</td>
+<td align="center">3.85</td>
+<td align="center">2.32</td>
+<td align="center">18.61</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center">24.4</td>
+<td align="center">146.7</td>
+<td align="center">62</td>
+<td align="center">3.69</td>
+<td align="center">3.19</td>
+<td align="center">20</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">4</td>
+<td align="center">2</td>
+</tr>
+<tr class="odd">
+<td align="center">22.8</td>
+<td align="center">140.8</td>
+<td align="center">95</td>
+<td align="center">3.92</td>
+<td align="center">3.15</td>
+<td align="center">22.9</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">4</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td align="center">32.4</td>
+<td align="center">78.7</td>
+<td align="center">66</td>
+<td align="center">4.08</td>
+<td align="center">2.2</td>
+<td align="center">19.47</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center">30.4</td>
+<td align="center">75.7</td>
+<td align="center">52</td>
+<td align="center">4.93</td>
+<td align="center">1.615</td>
+<td align="center">18.52</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td align="center">33.9</td>
+<td align="center">71.1</td>
+<td align="center">65</td>
+<td align="center">4.22</td>
+<td align="center">1.835</td>
+<td align="center">19.9</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center">21.5</td>
+<td align="center">120.1</td>
+<td align="center">97</td>
+<td align="center">3.7</td>
+<td align="center">2.465</td>
+<td align="center">20.01</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center">27.3</td>
+<td align="center">79</td>
+<td align="center">66</td>
+<td align="center">4.08</td>
+<td align="center">1.935</td>
+<td align="center">18.9</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center">26</td>
+<td align="center">120.3</td>
+<td align="center">91</td>
+<td align="center">4.43</td>
+<td align="center">2.14</td>
+<td align="center">16.7</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td align="center">30.4</td>
+<td align="center">95.1</td>
+<td align="center">113</td>
+<td align="center">3.77</td>
+<td align="center">1.513</td>
+<td align="center">16.9</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">2</td>
+</tr>
+<tr class="odd">
+<td align="center">21.4</td>
+<td align="center">121</td>
+<td align="center">109</td>
+<td align="center">4.11</td>
+<td align="center">2.78</td>
+<td align="center">18.6</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">2</td>
+</tr>
+</tbody>
+</table>
+<table style="width:94%;" class="table">
+<caption>Cars with 8 cylinders</caption>
+<colgroup>
+<col width="9%">
+<col width="11%">
+<col width="8%">
+<col width="9%">
+<col width="11%">
+<col width="11%">
+<col width="6%">
+<col width="6%">
+<col width="9%">
+<col width="9%">
+</colgroup>
+<thead><tr class="header">
+<th align="center">mpg</th>
+<th align="center">disp</th>
+<th align="center">hp</th>
+<th align="center">drat</th>
+<th align="center">wt</th>
+<th align="center">qsec</th>
+<th align="center">vs</th>
+<th align="center">am</th>
+<th align="center">gear</th>
+<th align="center">carb</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="center">18.7</td>
+<td align="center">360</td>
+<td align="center">175</td>
+<td align="center">3.15</td>
+<td align="center">3.44</td>
+<td align="center">17.02</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td align="center">14.3</td>
+<td align="center">360</td>
+<td align="center">245</td>
+<td align="center">3.21</td>
+<td align="center">3.57</td>
+<td align="center">15.84</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">4</td>
+</tr>
+<tr class="odd">
+<td align="center">16.4</td>
+<td align="center">275.8</td>
+<td align="center">180</td>
+<td align="center">3.07</td>
+<td align="center">4.07</td>
+<td align="center">17.4</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+</tr>
+<tr class="even">
+<td align="center">17.3</td>
+<td align="center">275.8</td>
+<td align="center">180</td>
+<td align="center">3.07</td>
+<td align="center">3.73</td>
+<td align="center">17.6</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+</tr>
+<tr class="odd">
+<td align="center">15.2</td>
+<td align="center">275.8</td>
+<td align="center">180</td>
+<td align="center">3.07</td>
+<td align="center">3.78</td>
+<td align="center">18</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+</tr>
+<tr class="even">
+<td align="center">10.4</td>
+<td align="center">472</td>
+<td align="center">205</td>
+<td align="center">2.93</td>
+<td align="center">5.25</td>
+<td align="center">17.98</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">4</td>
+</tr>
+<tr class="odd">
+<td align="center">10.4</td>
+<td align="center">460</td>
+<td align="center">215</td>
+<td align="center">3</td>
+<td align="center">5.424</td>
+<td align="center">17.82</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">4</td>
+</tr>
+<tr class="even">
+<td align="center">14.7</td>
+<td align="center">440</td>
+<td align="center">230</td>
+<td align="center">3.23</td>
+<td align="center">5.345</td>
+<td align="center">17.42</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">4</td>
+</tr>
+<tr class="odd">
+<td align="center">15.5</td>
+<td align="center">318</td>
+<td align="center">150</td>
+<td align="center">2.76</td>
+<td align="center">3.52</td>
+<td align="center">16.87</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td align="center">15.2</td>
+<td align="center">304</td>
+<td align="center">150</td>
+<td align="center">3.15</td>
+<td align="center">3.435</td>
+<td align="center">17.3</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr class="odd">
+<td align="center">13.3</td>
+<td align="center">350</td>
+<td align="center">245</td>
+<td align="center">3.73</td>
+<td align="center">3.84</td>
+<td align="center">15.41</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">4</td>
+</tr>
+<tr class="even">
+<td align="center">19.2</td>
+<td align="center">400</td>
+<td align="center">175</td>
+<td align="center">3.08</td>
+<td align="center">3.845</td>
+<td align="center">17.05</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr class="odd">
+<td align="center">15.8</td>
+<td align="center">351</td>
+<td align="center">264</td>
+<td align="center">4.22</td>
+<td align="center">3.17</td>
+<td align="center">14.5</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">4</td>
+</tr>
+<tr class="even">
+<td align="center">15</td>
+<td align="center">301</td>
+<td align="center">335</td>
+<td align="center">3.54</td>
+<td align="center">3.57</td>
+<td align="center">14.6</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">8</td>
+</tr>
+</tbody>
+</table></main>
 </div>
 
 
