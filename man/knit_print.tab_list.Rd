@@ -8,7 +8,7 @@
   x,
   ...,
   caption,
-  print_fun = pander::pander,
+  print_fun = print_tablist_pander,
   tab_prefix = NULL,
   tab_suffix = "\\n\\n"
 )
