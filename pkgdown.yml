@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   example-usage: example-usage.html
-last_built: 2025-02-25T20:06Z
+last_built: 2025-02-25T20:19Z
 urls:
   reference: https://humanpred.github.io/tabtibble/reference
   article: https://humanpred.github.io/tabtibble/articles
