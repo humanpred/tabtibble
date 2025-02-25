@@ -33,7 +33,7 @@ vec_ptype_abbr.tab_list <- function(x, ...) {
 
 #' @export
 format.tab_list <- function(x, ...) {
-  rep("A tab_list object", length(x))
+  sprintf("A %s object", vapply(X = x, FUN = \(x) class(x)[1], FUN.VALUE = ""))
 }
 
 #' @export

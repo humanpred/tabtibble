@@ -9,3 +9,17 @@ test_that("new_tab_list", {
   new_tl <- new_tab_list(list(data.frame(a = 1)))
   expect_s3_class(new_tl, "tab_list")
 })
+
+test_that("vctrs methods", {
+  d_tab <-
+    mtcars |>
+    tidyr::nest(table = !"cyl") |>
+    dplyr::mutate(
+      caption = glue::glue("Cars with {cyl} cylinders")
+    ) |>
+    new_tab_tibble()
+  expect_output(
+    print(d_tab),
+    regexp = "Cars with 8 cylinders"
+  )
+}
