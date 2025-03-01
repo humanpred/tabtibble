@@ -1,6 +1,6 @@
 Package: tabtibble
 Title: Simplify Reporting Many Tables
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: 
     person("Bill", "Denney", email="wdenney@humanpredictions.com", role=c("aut", "cre"), comment=c(ORCID="0000-0002-5759-428X"))
 Description: What the package does (one paragraph).
@@ -16,6 +16,7 @@ Suggests:
     glue,
     pander,
     rmarkdown,
+    spelling,
     testthat (>= 3.0.0),
     tibble,
     tidyr
@@ -23,3 +24,4 @@ Config/testthat/edition: 3
 URL: https://github.com/humanpred/tabtibble, https://humanpred.github.io/tabtibble/
 BugReports: https://github.com/humanpred/tabtibble/issues
 VignetteBuilder: knitr
+Language: en-US
