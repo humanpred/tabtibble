@@ -8,7 +8,7 @@
   x,
   ...,
   caption,
-  print_fun = print_tablist_pander,
+  print_fun = NULL,
   tab_prefix = NULL,
   tab_suffix = "\\n\\n"
 )
@@ -20,7 +20,8 @@
 
 \item{caption}{The caption for each table as a character vector}
 
-\item{print_fun}{A function taking arguments of \code{x} (one data.frame to
+\item{print_fun}{Override the default printing using \code{print_tabtibble}. If
+provided it is a function taking arguments of \code{x} (one data.frame to
 print), \code{caption} (the caption for that data.frame), and \code{...}.}
 
 \item{tab_prefix, tab_suffix}{Any text to add before/after each figure (\code{NULL}

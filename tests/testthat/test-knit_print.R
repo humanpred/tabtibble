@@ -1,4 +1,4 @@
-test_that("knit_print.tab_tibble (and implicitly knit_print.tab_list and print_tablist_pander)", {
+test_that("knit_print.tab_tibble (and implicitly knit_print.tab_list and print_tabtibble.tab_pander)", {
   d_tab <-
     mtcars |>
     tidyr::nest(table = !"cyl") |>
