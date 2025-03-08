@@ -10,4 +10,10 @@ test_that("knit_print.tab_tibble (and implicitly knit_print.tab_list and print_t
     suppressWarnings(knit_print(d_tab, tab_prefix = "foo")),
     regexp = "foo"
   )
+
+  # print_fun uses a custom function
+  expect_output(
+    suppressWarnings(knit_print(d_tab, print_fun = function(x, ...) print(head(x, 1)))),
+    regexp = "mpg  disp    hp  drat    wt  qsec    vs    am  gear  carb"
+  )
 })
