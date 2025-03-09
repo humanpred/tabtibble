@@ -16,6 +16,11 @@ knit_print.tab_tibble <- function(x, ...) {
 
 #' Print a tab_list
 #'
+#' @details
+#' Individual tables are printed with the `print_tabtibble()` S3 generic
+#' function.
+#'
+#'
 #' @param x The `tab_list` object to print
 #' @param ... passed to `print_fun`
 #' @param caption The caption for each table as a character vector

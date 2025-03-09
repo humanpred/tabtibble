@@ -33,6 +33,10 @@ to omit)}
 \description{
 Print a tab_list
 }
+\details{
+Individual tables are printed with the \code{print_tabtibble()} S3 generic
+function.
+}
 \seealso{
 Other knitters: 
 \code{\link{knit_print.tab_tibble}()}
