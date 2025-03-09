@@ -3,7 +3,9 @@ Title: Simplify Reporting Many Tables
 Version: 0.0.1
 Authors@R: 
     person("Bill", "Denney", email="wdenney@humanpredictions.com", role=c("aut", "cre"), comment=c(ORCID="0000-0002-5759-428X"))
-Description: What the package does (one paragraph).
+Description: Simplify reporting many tables by creating tibbles of tables. With
+  'tabtibble', a tibble of tables is created with captions and automatic
+  printing using 'knit_print()'.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
