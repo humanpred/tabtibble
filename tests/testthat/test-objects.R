@@ -20,13 +20,9 @@ test_that("new_tab_list", {
 })
 
 test_that("vctrs methods", {
-  d_tab <-
-    mtcars |>
-    tidyr::nest(table = !"cyl") |>
-    dplyr::mutate(
-      caption = glue::glue("Cars with {cyl} cylinders")
-    ) |>
-    new_tab_tibble()
+  d_tab_prep <- tidyr::nest(mtcars, table = !"cyl")
+  d_tab_prep <- dplyr::mutate(d_tab_prep, caption = glue::glue("Cars with {cyl} cylinders"))
+  d_tab <- new_tab_tibble(d_tab_prep)
   expect_output(
     print(d_tab),
     regexp = "Cars with 8 cylinders"

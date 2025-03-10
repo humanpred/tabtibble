@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(tabtibble)
+library(dplyr)
 ```
 
 The `tabtibble` package is typically used to create a list of tables for
@@ -26,11 +27,11 @@ grouped together.
 
 ```{r example-setup}
 d_tab <-
-  mtcars |>
-  tidyr::nest(table = !"cyl") |>
+  mtcars %>%
+  tidyr::nest(table = !"cyl") %>%
   dplyr::mutate(
     caption = glue::glue("Cars with {cyl} cylinders")
-  ) |>
+  ) %>%
   new_tab_tibble()
 ```
 
