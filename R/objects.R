@@ -19,10 +19,11 @@ new_tab_list <- function(x) {
   if (!inherits(x, "list")) {
     stop("`x` must be a list")
   }
-  x_null <- vapply(X = x, FUN = is.null, FUN.VALUE = TRUE)
-  x_df <- vapply(X = x, FUN = inherits, "data.frame", FUN.VALUE = TRUE)
-  if (!all(x_null | x_df)) {
-    stop("The contents of 'x' must be NULL or a 'data.frame'-like object")
+  x_null   <- vapply(X = x, FUN = is.null,  FUN.VALUE = TRUE)
+  x_df     <- vapply(X = x, FUN = inherits, "data.frame", FUN.VALUE = TRUE)
+  x_table1 <- vapply(X = x, FUN = inherits, "table1",     FUN.VALUE = TRUE)
+  if (!all(x_null | x_df | x_table1)) {
+    stop("The contents of 'x' must be NULL, a 'data.frame'-like object, or a 'table1' object")
   }
   vctrs::new_vctr(x, class = "tab_list")
 }
