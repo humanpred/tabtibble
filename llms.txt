@@ -1,0 +1,48 @@
+# tabtibble
+
+The goal of tabtibble is to simplify printing many tables in reports
+typically created with `quarto` or `rmarkdown`.
+
+## Installation
+
+You can install the development version of tabtibble like so:
+
+``` r
+remotes::install_github("humanpred/tabtibble")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+``` r
+library(tabtibble)
+my_tt <- new_tab_tibble(tibble::tibble(table = list(data.frame(a = 1)), caption = "foo"))
+knit_print(my_tt)
+```
+
+# Package index
+
+## All functions
+
+- [`knit_print(`*`<tab_list>`*`)`](https://humanpred.github.io/tabtibble/reference/knit_print.tab_list.md)
+  : Print a tab_list
+
+- [`knit_print(`*`<tab_tibble>`*`)`](https://humanpred.github.io/tabtibble/reference/knit_print.tab_tibble.md)
+  : Print a tab_tibble
+
+- [`new_tab_tibble()`](https://humanpred.github.io/tabtibble/reference/new_tab_tibble.md)
+  [`new_tab_list()`](https://humanpred.github.io/tabtibble/reference/new_tab_tibble.md)
+  :
+
+  Create a new `tab_tibble` object
+
+- [`print_tabtibble()`](https://humanpred.github.io/tabtibble/reference/print_tabtibble.md)
+  : Print a single table from a tablist
+
+# Articles
+
+### All vignettes
+
+- [Example
+  Usage](https://humanpred.github.io/tabtibble/articles/example-usage.md):
