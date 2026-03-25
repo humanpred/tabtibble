@@ -13,12 +13,13 @@ RoxygenNote: 7.3.2
 Imports: 
     knitr,
     vctrs
-Suggests: 
+Suggests:
     dplyr,
     glue,
     pander,
     rmarkdown,
     spelling,
+    table1,
     testthat (>= 3.0.0),
     tibble,
     tidyr
