@@ -15,8 +15,22 @@ test_that("new_tab_list", {
   )
   expect_error(
     new_tab_list(list("A")),
-    regexp = "The contents of 'x' must be NULL or a 'data.frame'-like object"
+    regexp = "The contents of 'x' must be NULL, a 'data.frame'-like object, or a 'table1' object"
   )
+})
+
+test_that("new_tab_list accepts table1 objects", {
+  skip_if_not_installed("table1")
+  d  <- data.frame(x = c(1, 2, 3), g = c("a", "a", "b"))
+  t1 <- table1::table1(~ x | g, data = d)
+  expect_s3_class(t1, "table1")
+
+  new_tl <- new_tab_list(list(t1))
+  expect_s3_class(new_tl, "tab_list")
+
+  new_tt <- new_tab_tibble(tibble::tibble(table = list(t1), caption = "Test table1"))
+  expect_s3_class(new_tt, "tab_tibble")
+  expect_s3_class(new_tt$table, "tab_list")
 })
 
 test_that("vctrs methods", {
