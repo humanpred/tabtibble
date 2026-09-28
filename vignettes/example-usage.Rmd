@@ -41,3 +41,56 @@ Then, print it! You must set `results='asis'` for the chunk printing your
 ```{r print, results='asis'}
 knit_print(d_tab)
 ```
+
+## Quarto + Typst reports
+
+Each table is wrapped in a fenced Div with a Quarto label (`#tbl-<label>`),
+so it can be cross-referenced with `@tbl-<label>` and, when the report is
+rendered to a Typst PDF, appears in a Typst list of tables. Add a label
+column when you want to choose the label yourself; otherwise a stable one is
+derived from the caption, so re-rendering the same report reproduces the
+same labels:
+
+```{r label-example}
+d_tab_labelled <-
+  mtcars %>%
+  tidyr::nest(table = !"cyl") %>%
+  dplyr::mutate(
+    caption = glue::glue("Cars with {cyl} cylinders"),
+    label = glue::glue("cyl-{cyl}")
+  ) %>%
+  new_tab_tibble()
+d_tab_labelled$label
+```
+
+In the Typst document, add a list of tables near the top with:
+
+````
+```{=typst}
+#outline(title: [List of Tables], target: figure.where(kind: "quarto-float-tbl"))
+```
+````
+
+(`"quarto-float-tbl"` is Quarto's own kind string for a crossreferenceable
+table from computational output; the native Typst `table` kind is for tables
+written directly in Typst source.)
+
+## Rendering backends
+
+By default, each table is rendered as a Markdown (pipe) table via
+`knitr::kable()`, so `tabtibble` itself needs no extra table-formatting
+package. Set the `tabtibble.backend` option to `"tinytable"`, `"gt"`, or
+`"flextable"` to render plain data.frame tables with that package instead
+(each package is only required when you select its backend):
+
+```{r backend-example}
+options(tabtibble.backend = "tinytable")
+```
+
+A table you already built with `gt`, `tinytable`, `flextable`, or `table1`
+is printed exactly as you built it, using that package's own printing
+method, regardless of `tabtibble.backend`.
+
+Caption and cell text containing Typst-significant characters (`* _ # @ $ <
+> \` [ ]` or a backslash) render literally; `tabtibble` escapes them once,
+for every backend, so you never need to escape them yourself.

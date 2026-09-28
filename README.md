@@ -29,4 +29,26 @@ This is a basic example which shows you how to solve a common problem:
 library(tabtibble)
 my_tt <- new_tab_tibble(tibble::tibble(table = list(data.frame(a = 1)), caption = "foo"))
 knit_print(my_tt)
+#> Warning in knit_print.tab_list(x$table, caption = x$caption, label = x$label, :
+#> `tab_list` printing usually requires `results='asis'` on the chunk header
+#> ::: {#tbl-foo-018cc6}
+#> 
+#> |  a|
+#> |--:|
+#> |  1|
+#> 
+#> foo
+#> 
+#> :::
 ```
+
+## Quarto + Typst reports
+
+Each table is wrapped in a fenced Div with a Quarto label
+(`#tbl-<label>`), derived automatically from its caption when not
+supplied, so it can be cross-referenced with `@tbl-<label>` and appears
+in a Typst list of tables when the report is rendered to a Typst PDF.
+Tables can be rendered as Markdown (the default, no extra dependency),
+or with `tinytable`, `gt`, or `flextable` via the `tabtibble.backend`
+option. See `vignette("example-usage", package = "tabtibble")` for
+details.

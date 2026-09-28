@@ -8,6 +8,7 @@
   x,
   ...,
   caption,
+  label = NULL,
   print_fun = NULL,
   tab_prefix = NULL,
   tab_suffix = "\\n\\n"
@@ -19,6 +20,10 @@
 \item{...}{passed to \code{print_fun}}
 
 \item{caption}{The caption for each table as a character vector}
+
+\item{label}{Character vector of Quarto labels (without the \verb{tbl-}
+prefix), one per table, matching \code{x} in length. \code{NULL} (the default)
+derives a label from each caption via \code{derive_label()}.}
 
 \item{print_fun}{Override the default printing using \code{print_tabtibble}. If
 provided it is a function taking arguments of \code{x} (one data.frame to
@@ -35,10 +40,17 @@ Print a tab_list
 }
 \details{
 Individual tables are printed with the \code{print_tabtibble()} S3 generic
-function.
+function. Each table is wrapped in a fenced Div with id \verb{#tbl-<label>}
+(Quarto's syntax for a crossreferenceable table from computational
+output), so \verb{@tbl-<label>} resolves and, when the report target is Typst,
+the table appears in a Typst \verb{#outline(target: figure.where(kind: "quarto-float-tbl"))} (the list of tables; that outline call belongs in
+the report template, not here). The caption is emitted once, as the
+Div's trailing paragraph, which Quarto promotes to the figure's caption;
+it is Typst/Pandoc-escaped (see \code{escape_typst()}) so caption text
+containing markup-significant characters renders literally.
 }
 \seealso{
-Other knitters: 
-\code{\link{knit_print.tab_tibble}()}
+Other knitters:
+\code{\link[=knit_print.tab_tibble]{knit_print.tab_tibble()}}
 }
 \concept{knitters}

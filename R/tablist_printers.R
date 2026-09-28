@@ -1,24 +1,36 @@
 #' Print a single table from a tablist
 #'
 #' @param x A table to print
-#' @param caption The caption for the table
+#' @param caption The caption for the table. Unused by the default method:
+#'   the caption is applied once by the surrounding cross-reference wrapper
+#'   in `knit_print.tab_list()`, not by the table object itself, so it is
+#'   not duplicated in the rendered Typst figure. Available to a custom
+#'   `print_fun` (see `knit_print.tab_list()`) that wants it for another
+#'   purpose.
 #' @param ... Passed to subsequent methods
 #' @export
 print_tabtibble <- function(x, caption, ...) {
   UseMethod("print_tabtibble")
 }
 
-#' @describeIn print_tabtibble Print a single table from a tablist using `pander::pander()`
-#' @param ... Passed to `pander::pander`
-#' @returns The result of `pander::pander`
+#' @describeIn print_tabtibble Print a single table from a tablist using the
+#'   backend selected by the `tabtibble.backend` option ("markdown"
+#'   (default), "tinytable", "gt", or "flextable"; see `render_backend_table()`)
+#'   when `x` is a plain data.frame. An `x` that is already a `gt`,
+#'   `tinytable`, `flextable`, or `table1` object (see `new_tab_list()`) is
+#'   printed via its own `knitr::knit_print()` method instead, regardless of
+#'   `tabtibble.backend`, so a table the caller built with a specific
+#'   package is rendered exactly as they built it.
+#' @param ... Passed to the backend's table constructor
+#'   (`knitr::kable()` / `tinytable::tt()` / `gt::gt()` /
+#'   `flextable::flextable()`), or to `x`'s own `knit_print()` method.
+#' @returns `x`, invisibly
 #' @export
 print_tabtibble.default <- function(x, caption, ...) {
-  auto_asis_start <- pander::panderOptions("knitr.auto.asis")
-  on.exit(pander::panderOptions("knitr.auto.asis", auto_asis_start))
-  pander::panderOptions("knitr.auto.asis", FALSE)
-  if (knitr::opts_current$get("results") != "asis") {
-    warning("`tab_list` printing usually requires `results='asis'` on the chunk header")
+  if (is.data.frame(x)) {
+    render_backend_table(x, ...)
+  } else {
+    emit_knit_print(x, ...)
   }
-
-  pander::pander(x, caption = caption, ...)
+  invisible(x)
 }

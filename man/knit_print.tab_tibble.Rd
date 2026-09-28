@@ -18,7 +18,7 @@
 Print a tab_tibble
 }
 \seealso{
-Other knitters: 
-\code{\link{knit_print.tab_list}()}
+Other knitters:
+\code{\link[=knit_print.tab_list]{knit_print.tab_list()}}
 }
 \concept{knitters}

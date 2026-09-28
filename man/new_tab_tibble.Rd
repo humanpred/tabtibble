@@ -10,7 +10,12 @@ new_tab_tibble(x)
 new_tab_list(x)
 }
 \arguments{
-\item{x}{The object to convert}
+\item{x}{The object to convert. A data.frame (or tibble) with columns
+\code{table} (list of tables; see \code{new_tab_list()}), \code{caption} (character),
+and optionally \code{label} (character, unique, a valid Quarto label without
+the \verb{tbl-} prefix -- see \code{derive_label()}). When \code{label} is absent or
+\code{NA}/empty for a row, a stable label is derived from that row's caption,
+so re-rendering the same caption always yields the same label.}
 }
 \value{
 An object with the desired class
