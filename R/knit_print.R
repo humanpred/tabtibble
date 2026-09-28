@@ -10,7 +10,7 @@ knitr::knit_print
 #' @family knitters
 #' @export
 knit_print.tab_tibble <- function(x, ...) {
-  knit_print(x$table, caption = x$caption, label = x$label, ...)
+  knit_print(x$table, caption = x$caption, label = x$label, topic_cols = x[["topic_cols"]], ...)
   invisible(x)
 }
 
@@ -34,6 +34,13 @@ knit_print.tab_tibble <- function(x, ...) {
 #' @param label Character vector of Quarto labels (without the `tbl-`
 #'   prefix), one per table, matching `x` in length. `NULL` (the default)
 #'   derives a label from each caption via `derive_label()`.
+#' @param topic_cols A list the same length as `x`, each element a character
+#'   vector of column names to group into repeating topic headers (used
+#'   only by the `"typst"` backend; see `render_backend_table()`); `NULL`
+#'   (the default) is treated as an empty vector for every table. Before a
+#'   table using the `"typst"` backend, a Typst rule allowing its figure to
+#'   break across pages is emitted ahead of the table's own crossref div --
+#'   see `emit_typst_breakable_figure_rule()`.
 #' @param print_fun Override the default printing using `print_tabtibble`. If
 #'   provided it is a function taking arguments of `x` (one data.frame to
 #'   print), `caption` (the caption for that data.frame), and `...`.
@@ -42,7 +49,7 @@ knit_print.tab_tibble <- function(x, ...) {
 #' @returns `x` invisibly
 #' @family knitters
 #' @export
-knit_print.tab_list <- function(x, ..., caption, label = NULL, print_fun = NULL, tab_prefix = NULL, tab_suffix = "\n\n") {
+knit_print.tab_list <- function(x, ..., caption, label = NULL, topic_cols = NULL, print_fun = NULL, tab_prefix = NULL, tab_suffix = "\n\n") {
   stopifnot(length(x) == length(caption))
   if (is.null(label)) {
     label <- vapply(caption, derive_label, character(1))
@@ -52,16 +59,25 @@ knit_print.tab_list <- function(x, ..., caption, label = NULL, print_fun = NULL,
   if (anyDuplicated(label)) {
     stop("`label` values must be unique.", call. = FALSE)
   }
+  if (is.null(topic_cols)) {
+    topic_cols <- replicate(length(x), character(0), simplify = FALSE)
+  } else {
+    stopifnot(length(x) == length(topic_cols))
+  }
   if (!identical(knitr::opts_current$get("results"), "asis")) {
     warning("`tab_list` printing usually requires `results='asis'` on the chunk header")
   }
+  backend <- getOption("tabtibble.backend", "markdown")
   for (idx in seq_along(x)) {
     if (!is.null(tab_prefix)) {
       cat(tab_prefix)
     }
+    if (is.null(print_fun) && identical(backend, "typst") && is.data.frame(x[[idx]])) {
+      emit_typst_breakable_figure_rule()
+    }
     cat("::: {#tbl-", label[[idx]], "}\n\n", sep = "")
     if (is.null(print_fun)) {
-      print_tabtibble(x = x[[idx]], caption = caption[[idx]], ...)
+      print_tabtibble(x = x[[idx]], caption = caption[[idx]], topic_cols = topic_cols[[idx]], ...)
     } else {
       print_fun(x = x[[idx]], caption = caption[[idx]], ...)
     }

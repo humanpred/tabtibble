@@ -36,7 +36,7 @@ quarto_typst_preamble <- c(
   "```"
 )
 
-render_typst_pdf <- function(body_lines) {
+render_typst_pdf_pages <- function(body_lines) {
   dir <- tempfile("tabtibble-quarto-")
   dir.create(dir)
   on.exit(unlink(dir, recursive = TRUE), add = TRUE)
@@ -45,7 +45,11 @@ render_typst_pdf <- function(body_lines) {
   writeLines(c(quarto_typst_preamble, body_lines), qmd)
   quarto::quarto_render(qmd, output_format = "typst", quiet = TRUE, as_job = FALSE)
   expect_true(file.exists(pdf))
-  paste(pdftools::pdf_text(pdf), collapse = "\n")
+  pdftools::pdf_text(pdf)
+}
+
+render_typst_pdf <- function(body_lines) {
+  paste(render_typst_pdf_pages(body_lines), collapse = "\n")
 }
 
 test_that("a tab_tibble renders to Typst with the caption in the List of Tables and a working @tbl- crossref", {
@@ -92,6 +96,98 @@ test_that("Typst-significant characters in a caption render literally in the Lis
   ))
 
   expect_match(txt, "Special: 50% * x_y # z", fixed = TRUE)
+})
+
+test_that("a typst-backend topic listing spans multiple pages with the header and topic repeating on each", {
+  skip_quarto_tests()
+
+  pages <- render_typst_pdf_pages(c(
+    "```{=typst}",
+    "#set page(height: 6cm)",
+    "```",
+    "",
+    "```{r echo=FALSE}",
+    "options(tabtibble.backend = 'typst')",
+    "d <- data.frame(time = 0:19, value = round((0:19) * 1.1, 1))",
+    "d_tab <- new_tab_tibble(tibble::tibble(",
+    "  table = list(d),",
+    "  caption = 'A topic-grouped listing',",
+    "  label = 'topiclisting',",
+    "  topic_cols = list('time')", # each row its own group: guarantees > 1 group repeats across pages
+    "))",
+    "```",
+    "",
+    "```{r results='asis'}",
+    "knit_print(d_tab)",
+    "```"
+  ))
+
+  expect_gte(length(pages), 3)
+  # the column header ("value") and *some* topic-row text repeat on every
+  # page the table continues onto -- check the last three pages, which are
+  # guaranteed to be pure table continuation (no title/List of Tables noise).
+  n <- length(pages)
+  for (p in pages[(n - 2):n]) {
+    expect_match(p, "value", fixed = TRUE)
+  }
+})
+
+test_that("a typst-backend table with a single topic group repeats that group's header on every continuation page", {
+  skip_quarto_tests()
+
+  pages <- render_typst_pdf_pages(c(
+    "```{=typst}",
+    "#set page(height: 6cm)",
+    "```",
+    "",
+    "```{r echo=FALSE}",
+    "options(tabtibble.backend = 'typst')",
+    "d <- data.frame(",
+    "  subject = rep('S001', 20),",
+    "  time = 0:19,",
+    "  value = round((0:19) * 1.1, 1)",
+    ")",
+    "d_tab <- new_tab_tibble(tibble::tibble(",
+    "  table = list(d),",
+    "  caption = 'A single-subject listing',",
+    "  label = 'onesubject',",
+    "  topic_cols = list('subject')",
+    "))",
+    "```",
+    "",
+    "```{r results='asis'}",
+    "knit_print(d_tab)",
+    "```"
+  ))
+
+  expect_gte(length(pages), 3)
+  n <- length(pages)
+  for (p in pages[(n - 2):n]) {
+    expect_match(p, "S001", fixed = TRUE)
+    expect_match(p, "value", fixed = TRUE)
+  }
+})
+
+test_that("a typst-backend table without topic_cols is an ordinary (non-grouped) repeating-header table", {
+  skip_quarto_tests()
+
+  txt <- render_typst_pdf(c(
+    "```{r echo=FALSE}",
+    "options(tabtibble.backend = 'typst')",
+    "d_tab <- new_tab_tibble(tibble::tibble(",
+    "  table = list(data.frame(x = 1:2, y = c('a', 'b'))),",
+    "  caption = 'An ordinary typst-backend table',",
+    "  label = 'ordinarytypst'",
+    "))",
+    "```",
+    "",
+    "```{r results='asis'}",
+    "knit_print(d_tab)",
+    "```"
+  ))
+
+  expect_match(txt, "An ordinary typst-backend table", fixed = TRUE)
+  expect_match(txt, "Table 1", fixed = TRUE)
 })
 
 test_that("multiple backends each produce a crossreferenceable, captioned table", {

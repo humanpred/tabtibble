@@ -7,7 +7,7 @@
 \usage{
 print_tabtibble(x, caption, ...)
 
-\method{print_tabtibble}{default}(x, caption, ...)
+\method{print_tabtibble}{default}(x, caption, ..., topic_cols = character(0))
 }
 \arguments{
 \item{x}{A table to print}
@@ -22,6 +22,10 @@ purpose.}
 \item{...}{Passed to the backend's table constructor
 (\code{knitr::kable()} / \code{tinytable::tt()} / \code{gt::gt()} /
 \code{flextable::flextable()}), or to \code{x}'s own \code{knit_print()} method.}
+
+\item{topic_cols}{Character vector of column names to group into
+repeating topic headers; only used by the \code{"typst"} backend (see
+\code{render_backend_table()}).}
 }
 \value{
 \code{x}, invisibly
@@ -33,11 +37,11 @@ Print a single table from a tablist
 \itemize{
 \item \code{print_tabtibble(default)}: Print a single table from a tablist using the
 backend selected by the \code{tabtibble.backend} option ("markdown"
-(default), "tinytable", "gt", or "flextable"; see \code{render_backend_table()})
-when \code{x} is a plain data.frame. An \code{x} that is already a \code{gt},
-\code{tinytable}, \code{flextable}, or \code{table1} object (see \code{new_tab_list()}) is
-printed via its own \code{knitr::knit_print()} method instead, regardless of
-\code{tabtibble.backend}, so a table the caller built with a specific
-package is rendered exactly as they built it.
+(default), "tinytable", "gt", "flextable", or "typst"; see
+\code{render_backend_table()}) when \code{x} is a plain data.frame. An \code{x} that
+is already a \code{gt}, \code{tinytable}, \code{flextable}, or \code{table1} object (see
+\code{new_tab_list()}) is printed via its own \code{knitr::knit_print()} method
+instead, regardless of \code{tabtibble.backend}, so a table the caller
+built with a specific package is rendered exactly as they built it.
 
 }}

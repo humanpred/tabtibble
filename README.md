@@ -49,6 +49,9 @@ Each table is wrapped in a fenced Div with a Quarto label
 supplied, so it can be cross-referenced with `@tbl-<label>` and appears
 in a Typst list of tables when the report is rendered to a Typst PDF.
 Tables can be rendered as Markdown (the default, no extra dependency),
-or with `tinytable`, `gt`, or `flextable` via the `tabtibble.backend`
+or with `tinytable`, `gt`, `flextable`, or natively in `typst` (which
+also supports topic-grouped listings, reproducing LaTeX’s TopicLongTable
+– a group value is printed once, above its rows, and repeats at the top
+of each page the group continues onto) via the `tabtibble.backend`
 option. See `vignette("example-usage", package = "tabtibble")` for
 details.

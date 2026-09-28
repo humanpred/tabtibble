@@ -9,6 +9,7 @@
   ...,
   caption,
   label = NULL,
+  topic_cols = NULL,
   print_fun = NULL,
   tab_prefix = NULL,
   tab_suffix = "\\n\\n"
@@ -24,6 +25,14 @@
 \item{label}{Character vector of Quarto labels (without the \verb{tbl-}
 prefix), one per table, matching \code{x} in length. \code{NULL} (the default)
 derives a label from each caption via \code{derive_label()}.}
+
+\item{topic_cols}{A list the same length as \code{x}, each element a character
+vector of column names to group into repeating topic headers (used
+only by the \code{"typst"} backend; see \code{render_backend_table()}); \code{NULL}
+(the default) is treated as an empty vector for every table. Before a
+table using the \code{"typst"} backend, a Typst rule allowing its figure to
+break across pages is emitted ahead of the table's own crossref div --
+see \code{emit_typst_breakable_figure_rule()}.}
 
 \item{print_fun}{Override the default printing using \code{print_tabtibble}. If
 provided it is a function taking arguments of \code{x} (one data.frame to

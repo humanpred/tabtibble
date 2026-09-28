@@ -1,6 +1,6 @@
 # Rendering backends for a plain data.frame table, selected by the
 # `tabtibble.backend` option ("markdown" (default), "tinytable", "gt",
-# "flextable"). Backends are only touched at print time -- `new_tab_tibble()`
+# "flextable", "typst"). Backends are only touched at print time -- `new_tab_tibble()`
 # / `new_tab_list()` never load any of these packages -- so storing a plain
 # data.frame in a `tab_list` carries no rendering dependency.
 #
@@ -56,13 +56,18 @@ emit_knit_print <- function(x, ...) {
 #' Render a plain data.frame table body through the selected backend
 #'
 #' @param x A data.frame.
+#' @param topic_cols Character vector of column names to group into
+#'   repeating topic headers (see `render_typst_table()`); only used by the
+#'   `"typst"` backend. The other backends ignore it gracefully -- the named
+#'   columns stay as ordinary columns, so their values repeat on every row,
+#'   as if `topic_cols` had not been set.
 #' @param ... Passed to the backend's table constructor
 #'   (`knitr::kable()` / `tinytable::tt()` / `gt::gt()` /
-#'   `flextable::flextable()`).
+#'   `flextable::flextable()`); unused by `"typst"`.
 #' @returns `NULL`, invisibly; called for the side effect of writing the
 #'   rendered table with `cat()`.
 #' @keywords internal
-render_backend_table <- function(x, ...) {
+render_backend_table <- function(x, topic_cols = character(0), ...) {
   backend <- getOption("tabtibble.backend", "markdown")
   switch(
     backend,
@@ -81,9 +86,12 @@ render_backend_table <- function(x, ...) {
       require_backend_package("flextable", backend)
       emit_knit_print(flextable::flextable(x, ...))
     },
+    typst = {
+      render_typst_table(x, topic_cols = topic_cols)
+    },
     stop(
       sprintf(
-        "Unknown `tabtibble.backend` %s; must be one of \"markdown\", \"tinytable\", \"gt\", \"flextable\".",
+        "Unknown `tabtibble.backend` %s; must be one of \"markdown\", \"tinytable\", \"gt\", \"flextable\", \"typst\".",
         sQuote(backend, q = FALSE)
       ),
       call. = FALSE

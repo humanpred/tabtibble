@@ -15,20 +15,23 @@ print_tabtibble <- function(x, caption, ...) {
 
 #' @describeIn print_tabtibble Print a single table from a tablist using the
 #'   backend selected by the `tabtibble.backend` option ("markdown"
-#'   (default), "tinytable", "gt", or "flextable"; see `render_backend_table()`)
-#'   when `x` is a plain data.frame. An `x` that is already a `gt`,
-#'   `tinytable`, `flextable`, or `table1` object (see `new_tab_list()`) is
-#'   printed via its own `knitr::knit_print()` method instead, regardless of
-#'   `tabtibble.backend`, so a table the caller built with a specific
-#'   package is rendered exactly as they built it.
+#'   (default), "tinytable", "gt", "flextable", or "typst"; see
+#'   `render_backend_table()`) when `x` is a plain data.frame. An `x` that
+#'   is already a `gt`, `tinytable`, `flextable`, or `table1` object (see
+#'   `new_tab_list()`) is printed via its own `knitr::knit_print()` method
+#'   instead, regardless of `tabtibble.backend`, so a table the caller
+#'   built with a specific package is rendered exactly as they built it.
+#' @param topic_cols Character vector of column names to group into
+#'   repeating topic headers; only used by the `"typst"` backend (see
+#'   `render_backend_table()`).
 #' @param ... Passed to the backend's table constructor
 #'   (`knitr::kable()` / `tinytable::tt()` / `gt::gt()` /
 #'   `flextable::flextable()`), or to `x`'s own `knit_print()` method.
 #' @returns `x`, invisibly
 #' @export
-print_tabtibble.default <- function(x, caption, ...) {
+print_tabtibble.default <- function(x, caption, ..., topic_cols = character(0)) {
   if (is.data.frame(x)) {
-    render_backend_table(x, ...)
+    render_backend_table(x, topic_cols = topic_cols, ...)
   } else {
     emit_knit_print(x, ...)
   }

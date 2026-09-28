@@ -4,14 +4,20 @@
 \alias{render_backend_table}
 \title{Render a plain data.frame table body through the selected backend}
 \usage{
-render_backend_table(x, ...)
+render_backend_table(x, topic_cols = character(0), ...)
 }
 \arguments{
 \item{x}{A data.frame.}
 
+\item{topic_cols}{Character vector of column names to group into
+repeating topic headers (see \code{render_typst_table()}); only used by the
+\code{"typst"} backend. The other backends ignore it gracefully -- the named
+columns stay as ordinary columns, so their values repeat on every row,
+as if \code{topic_cols} had not been set.}
+
 \item{...}{Passed to the backend's table constructor
 (\code{knitr::kable()} / \code{tinytable::tt()} / \code{gt::gt()} /
-\code{flextable::flextable()}).}
+\code{flextable::flextable()}); unused by \code{"typst"}.}
 }
 \value{
 \code{NULL}, invisibly; called for the side effect of writing the

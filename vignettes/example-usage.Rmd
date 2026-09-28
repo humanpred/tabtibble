@@ -94,3 +94,55 @@ method, regardless of `tabtibble.backend`.
 Caption and cell text containing Typst-significant characters (`* _ # @ $ <
 > \` [ ]` or a backslash) render literally; `tabtibble` escapes them once,
 for every backend, so you never need to escape them yourself.
+
+## Topic-grouped listings (`"typst"` backend)
+
+The `"typst"` backend reproduces what LaTeX's TopicLongTable gave: a listing
+sorted by one or more "topic" columns (for example subject, then analyte)
+that prints each topic value once, as a group header above its rows, instead
+of repeating it on every row. When the group runs onto the next page, the
+column header and the current topic repeat at the top of that page, so a
+reader never sees a page of data with no idea which subject it belongs to.
+Declare the topic columns with `topic_cols`; the underlying table must
+already be sorted by them:
+
+```{r topic-example}
+conc <-
+  tibble::tibble(
+    subject = rep(c("S001", "S002"), each = 3),
+    time    = rep(0:2, times = 2),
+    conc    = c(0, 5.1, 4.3, 0, 6.0, 5.2)
+  )
+
+d_tab_topic <-
+  tibble::tibble(
+    table      = list(conc),
+    caption    = "Concentrations by subject",
+    label      = "conc-by-subject",
+    topic_cols = list("subject")
+  ) %>%
+  new_tab_tibble()
+
+options(tabtibble.backend = "typst")
+```
+
+```{r topic-print, results='asis'}
+knit_print(d_tab_topic)
+```
+
+Without `topic_cols`, the `"typst"` backend is an ordinary table whose
+column header repeats on every page. The other backends ignore
+`topic_cols` gracefully: the named columns stay as ordinary columns, so
+their values just repeat on every row.
+
+Column alignment defaults to right for numeric columns and left for
+everything else; override it with a `tabtibble_align` attribute (a named
+character vector of `"left"`, `"right"`, or `"center"`) set on the table
+before calling `new_tab_tibble()`:
+
+```{r topic-align-example}
+attr(conc, "tabtibble_align") <- c(subject = "left", time = "center", conc = "right")
+d_tab_topic_aligned <-
+  tibble::tibble(table = list(conc), caption = "Aligned columns", topic_cols = list("subject")) %>%
+  new_tab_tibble()
+```
