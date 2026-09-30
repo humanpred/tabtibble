@@ -35,9 +35,120 @@ d_tab <-
   new_tab_tibble()
 ```
 
-Then, print it! You must set `results='asis'` for the chunk printing your
-`tab_tibble`.
+Then, print it! By default (the `tabtibble.knitr.auto.asis` option, `TRUE`),
+no `results='asis'` chunk option is needed -- the same mechanism pander uses
+for its `knitr.auto.asis` option, returning the rendered markdown as
+`knitr::asis_output()` so knitr inserts it directly.
 
-```{r print, results='asis'}
+```{r print}
 knit_print(d_tab)
+```
+
+Set `options(tabtibble.knitr.auto.asis = FALSE)` to go back to writing
+directly with `cat()` instead, which does require `results='asis'` on the
+chunk (and warns when it is missing).
+
+## Quarto + Typst reports
+
+Each table is wrapped in a fenced Div with a Quarto label (`#tbl-<label>`),
+so it can be cross-referenced with `@tbl-<label>` and, when the report is
+rendered to a Typst PDF, appears in a Typst list of tables. Add a label
+column when you want to choose the label yourself; otherwise a stable one is
+derived from the caption, so re-rendering the same report reproduces the
+same labels:
+
+```{r label-example}
+d_tab_labelled <-
+  mtcars %>%
+  tidyr::nest(table = !"cyl") %>%
+  dplyr::mutate(
+    caption = glue::glue("Cars with {cyl} cylinders"),
+    label = glue::glue("cyl-{cyl}")
+  ) %>%
+  new_tab_tibble()
+d_tab_labelled$label
+```
+
+In the Typst document, add a list of tables near the top with:
+
+````
+```{=typst}
+#outline(title: [List of Tables], target: figure.where(kind: "quarto-float-tbl"))
+```
+````
+
+(`"quarto-float-tbl"` is Quarto's own kind string for a crossreferenceable
+table from computational output; the native Typst `table` kind is for tables
+written directly in Typst source.)
+
+## Rendering backends
+
+By default, each table is rendered as a Markdown (pipe) table via
+`knitr::kable()`, so `tabtibble` itself needs no extra table-formatting
+package. Set the `tabtibble.backend` option to `"tinytable"`, `"gt"`, or
+`"flextable"` to render plain data.frame tables with that package instead
+(each package is only required when you select its backend):
+
+```{r backend-example}
+options(tabtibble.backend = "tinytable")
+```
+
+A table you already built with `gt`, `tinytable`, `flextable`, or `table1`
+is printed exactly as you built it, using that package's own printing
+method, regardless of `tabtibble.backend`.
+
+Caption and cell text containing Typst-significant characters (`* _ # @ $ <
+> \` [ ]` or a backslash) render literally; `tabtibble` escapes them once,
+for every backend, so you never need to escape them yourself.
+
+## Topic-grouped listings (`"typst"` backend)
+
+The `"typst"` backend reproduces what LaTeX's TopicLongTable gave: a listing
+sorted by one or more "topic" columns (for example subject, then analyte)
+that prints each topic value once, as a group header above its rows, instead
+of repeating it on every row. When the group runs onto the next page, the
+column header and the current topic repeat at the top of that page, so a
+reader never sees a page of data with no idea which subject it belongs to.
+Declare the topic columns with `topic_cols`; the underlying table must
+already be sorted by them:
+
+```{r topic-example}
+conc <-
+  tibble::tibble(
+    subject = rep(c("S001", "S002"), each = 3),
+    time    = rep(0:2, times = 2),
+    conc    = c(0, 5.1, 4.3, 0, 6.0, 5.2)
+  )
+
+d_tab_topic <-
+  tibble::tibble(
+    table      = list(conc),
+    caption    = "Concentrations by subject",
+    label      = "conc-by-subject",
+    topic_cols = list("subject")
+  ) %>%
+  new_tab_tibble()
+
+options(tabtibble.backend = "typst")
+```
+
+```{r topic-print, results='asis'}
+knit_print(d_tab_topic)
+```
+
+Without `topic_cols`, the `"typst"` backend is an ordinary table whose
+column header repeats on every page. The other backends ignore
+`topic_cols` gracefully: the named columns stay as ordinary columns, so
+their values just repeat on every row.
+
+Column alignment defaults to right for numeric columns and left for
+everything else; override it with a `tabtibble_align` attribute (a named
+character vector of `"left"`, `"right"`, or `"center"`) set on the table
+before calling `new_tab_tibble()`:
+
+```{r topic-align-example}
+attr(conc, "tabtibble_align") <- c(subject = "left", time = "center", conc = "right")
+d_tab_topic_aligned <-
+  tibble::tibble(table = list(conc), caption = "Aligned columns", topic_cols = list("subject")) %>%
+  new_tab_tibble()
 ```

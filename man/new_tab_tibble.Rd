@@ -10,7 +10,18 @@ new_tab_tibble(x)
 new_tab_list(x)
 }
 \arguments{
-\item{x}{The object to convert}
+\item{x}{The object to convert. A data.frame (or tibble) with columns
+\code{table} (list of tables; see \code{new_tab_list()}), \code{caption} (character),
+and optionally \code{label} (character, unique, a valid Quarto label without
+the \verb{tbl-} prefix -- see \code{derive_label()}) and \code{topic_cols} (list
+column, one character vector per table, naming columns -- in
+outer-to-inner order -- that the \code{"typst"} backend groups into
+repeating topic headers instead of repeating their values on every row;
+see \code{render_typst_table()}). When \code{label} is absent or \code{NA}/empty for a
+row, a stable label is derived from that row's caption, so re-rendering
+the same caption always yields the same label. Each \code{topic_cols[[i]]}
+must name columns present in \code{table[[i]]}, and \code{table[[i]]} must
+already be sorted by them.}
 }
 \value{
 An object with the desired class

@@ -11,6 +11,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{knitr}{\code{\link[knitr]{knit_print}}}
+  \item{knitr}{\code{\link[knitr:knit_print]{knit_print()}}}
 }}
 

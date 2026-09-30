@@ -8,6 +8,8 @@
   x,
   ...,
   caption,
+  label = NULL,
+  topic_cols = NULL,
   print_fun = NULL,
   tab_prefix = NULL,
   tab_suffix = "\\n\\n"
@@ -20,6 +22,18 @@
 
 \item{caption}{The caption for each table as a character vector}
 
+\item{label}{Character vector of Quarto labels (without the \verb{tbl-}
+prefix), one per table, matching \code{x} in length. \code{NULL} (the default)
+derives a label from each caption via \code{derive_label()}.}
+
+\item{topic_cols}{A list the same length as \code{x}, each element a character
+vector of column names to group into repeating topic headers (used
+only by the \code{"typst"} backend; see \code{render_backend_table()}); \code{NULL}
+(the default) is treated as an empty vector for every table. Before a
+table using the \code{"typst"} backend, a Typst rule allowing its figure to
+break across pages is emitted ahead of the table's own crossref div --
+see \code{emit_typst_breakable_figure_rule()}.}
+
 \item{print_fun}{Override the default printing using \code{print_tabtibble}. If
 provided it is a function taking arguments of \code{x} (one data.frame to
 print), \code{caption} (the caption for that data.frame), and \code{...}.}
@@ -28,17 +42,47 @@ print), \code{caption} (the caption for that data.frame), and \code{...}.}
 to omit)}
 }
 \value{
-\code{x} invisibly
+With \code{tabtibble.knitr.auto.asis} \code{TRUE} (the default), a
+\code{knitr::asis_output()} character value holding the rendered markdown.
+With it \code{FALSE}, \code{x} invisibly (the markdown is written with \code{cat()}
+as a side effect instead).
 }
 \description{
 Print a tab_list
 }
 \details{
 Individual tables are printed with the \code{print_tabtibble()} S3 generic
-function.
+function. Under Quarto (see \code{detect_render_mode()}), each table is
+wrapped in a fenced Div with id \verb{#tbl-<label>} (Quarto's syntax for a
+crossreferenceable table from computational output), so \verb{@tbl-<label>}
+resolves and, when the report target is Typst, the table appears in a
+Typst \verb{#outline(target: figure.where(kind: "quarto-float-tbl"))} (the
+list of tables; that outline call belongs in the report template, not
+here). The caption is emitted once, as the Div's trailing paragraph,
+which Quarto promotes to the figure's caption; it is Typst/Pandoc-escaped
+(see \code{escape_typst()}) so caption text containing markup-significant
+characters renders literally.
+
+Under plain R Markdown, that Div is skipped: rendered by plain Pandoc
+(no Quarto filter to interpret it), it would show up as a literal,
+uncaptioned wrapper rather than a table figure. Instead, each table
+carries an ordinary caption the output target understands -- see
+\code{render_backend_table()} -- so a report that never used Quarto keeps
+working exactly as it did before crossref support was added.
+
+By default (the \code{tabtibble.knitr.auto.asis} option, \code{TRUE}), the
+rendered markdown is captured and returned as \code{knitr::asis_output()},
+the same mechanism pander uses for its \code{knitr.auto.asis} option: knitr
+inserts an asis-classed return value into the document directly,
+whatever the chunk's own \code{results} setting, so a chunk printing a
+\code{tab_tibble}/\code{tab_list} needs no \code{results='asis'} chunk option. Set
+\code{options(tabtibble.knitr.auto.asis = FALSE)} to opt out and go back to
+writing directly with \code{cat()} (requiring \code{results='asis'}, with a
+warning when it is missing) -- useful if something downstream needs to
+see the literal \code{cat()} side effect rather than a returned value.
 }
 \seealso{
-Other knitters: 
-\code{\link{knit_print.tab_tibble}()}
+Other knitters:
+\code{\link[=knit_print.tab_tibble]{knit_print.tab_tibble()}}
 }
 \concept{knitters}

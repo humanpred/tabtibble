@@ -1,6 +1,17 @@
 #' Create a new `tab_tibble` object
 #'
-#' @param x The object to convert
+#' @param x The object to convert. A data.frame (or tibble) with columns
+#'   `table` (list of tables; see `new_tab_list()`), `caption` (character),
+#'   and optionally `label` (character, unique, a valid Quarto label without
+#'   the `tbl-` prefix -- see `derive_label()`) and `topic_cols` (list
+#'   column, one character vector per table, naming columns -- in
+#'   outer-to-inner order -- that the `"typst"` backend groups into
+#'   repeating topic headers instead of repeating their values on every row;
+#'   see `render_typst_table()`). When `label` is absent or `NA`/empty for a
+#'   row, a stable label is derived from that row's caption, so re-rendering
+#'   the same caption always yields the same label. Each `topic_cols[[i]]`
+#'   must name columns present in `table[[i]]`, and `table[[i]]` must
+#'   already be sorted by them.
 #' @returns An object with the desired class
 #' @export
 new_tab_tibble <- function(x) {
@@ -9,9 +20,36 @@ new_tab_tibble <- function(x) {
   if (!inherits(x$table, "tab_list")) {
     x$table <- new_tab_list(x$table)
   }
+  x$caption <- as.character(x$caption)
+  if (!("label" %in% names(x))) {
+    x$label <- rep(NA_character_, nrow(x))
+  }
+  x$label <- as.character(x$label)
+  missing_label <- is.na(x$label) | !nzchar(x$label)
+  for (idx in which(!missing_label)) {
+    validate_label(x$label[[idx]])
+  }
+  if (any(missing_label)) {
+    x$label[missing_label] <- vapply(x$caption[missing_label], derive_label, character(1))
+  }
+  if (anyDuplicated(x$label)) {
+    dupes <- unique(x$label[duplicated(x$label)])
+    stop(
+      sprintf("`label` values must be unique; duplicated: %s", paste(sQuote(dupes), collapse = ", ")),
+      call. = FALSE
+    )
+  }
+  x$topic_cols <- validate_topic_cols(x$table, x[["topic_cols"]])
   class(x) <- unique(c("tab_tibble", class(x)))
   x
 }
+
+# Classes accepted in a `tab_list` beyond plain data.frame-like objects:
+# pre-built tables from each rendering backend (gt_tbl, tinytable,
+# flextable), which are checked by class name only -- `inherits()` never
+# loads the package, so this validation does not require gt/tinytable/
+# flextable to be installed unless the caller actually passes one.
+.tab_list_prebuilt_classes <- c("gt_tbl", "tinytable", "flextable", "table1")
 
 #' @describeIn new_tab_tibble Create a new `tab_list` object
 #' @export
@@ -19,11 +57,14 @@ new_tab_list <- function(x) {
   if (!inherits(x, "list")) {
     stop("`x` must be a list")
   }
-  x_null   <- vapply(X = x, FUN = is.null,  FUN.VALUE = TRUE)
-  x_df     <- vapply(X = x, FUN = inherits, "data.frame", FUN.VALUE = TRUE)
-  x_table1 <- vapply(X = x, FUN = inherits, "table1",     FUN.VALUE = TRUE)
-  if (!all(x_null | x_df | x_table1)) {
-    stop("The contents of 'x' must be NULL, a 'data.frame'-like object, or a 'table1' object")
+  x_null     <- vapply(X = x, FUN = is.null,  FUN.VALUE = TRUE)
+  x_df       <- vapply(X = x, FUN = inherits, "data.frame", FUN.VALUE = TRUE)
+  x_prebuilt <- vapply(X = x, FUN = inherits, .tab_list_prebuilt_classes, FUN.VALUE = TRUE)
+  if (!all(x_null | x_df | x_prebuilt)) {
+    stop(
+      "The contents of 'x' must be NULL, a 'data.frame'-like object, or a ",
+      "'gt', 'tinytable', 'flextable', or 'table1' object"
+    )
   }
   vctrs::new_vctr(x, class = "tab_list")
 }
