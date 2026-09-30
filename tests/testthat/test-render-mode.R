@@ -39,15 +39,38 @@ test_that("detect_output_target returns \"other\" outside any knit", {
   expect_identical(detect_output_target(), "other")
 })
 
+with_pandoc_to <- function(to, code) {
+  old <- knitr::opts_knit$get("rmarkdown.pandoc.to")
+  knitr::opts_knit$set(rmarkdown.pandoc.to = to)
+  on.exit(knitr::opts_knit$set(rmarkdown.pandoc.to = old))
+  force(code)
+}
+
+test_that("detect_output_target detects latex via knitr::is_latex_output()", {
+  with_pandoc_to("latex", expect_identical(detect_output_target(), "latex"))
+})
+
+test_that("detect_output_target detects html via knitr::is_html_output()", {
+  with_pandoc_to("html", expect_identical(detect_output_target(), "html"))
+})
+
+test_that("detect_output_target detects typst via knitr::pandoc_to()", {
+  with_pandoc_to("typst", expect_identical(detect_output_target(), "typst"))
+})
+
+test_that("detect_output_target detects docx via knitr::pandoc_to()", {
+  with_pandoc_to("docx", expect_identical(detect_output_target(), "docx"))
+})
+
 test_that("under Quarto mode, knit_print wraps the table in the crossref div", {
   d_tab <- new_tab_tibble(
     tibble::tibble(table = list(data.frame(x = 1)), caption = "A caption", label = "modequarto")
   )
-  with_tabtibble_render_mode("quarto", {
+  with_tabtibble_render_mode("quarto", with_tabtibble_auto_asis(FALSE, {
     out <- capture.output(suppressWarnings(knit_print(d_tab)))
     expect_identical(out[1], "::: {#tbl-modequarto}")
     expect_true(any(out == ":::"))
-  })
+  }))
 })
 
 test_that("under R Markdown mode, knit_print omits the crossref div and captions the table instead", {
@@ -107,6 +130,23 @@ test_that("under R Markdown mode, the flextable backend applies the caption via 
     ft <- flextable::set_caption(ft, caption = "Flextable caption")
     expect_identical(ft$caption$value, "Flextable caption")
   }))
+})
+
+test_that("render_backend_table calls flextable::set_caption() under R Markdown mode", {
+  skip_if_not_installed("flextable")
+  calls <- new.env(parent = emptyenv())
+  calls$caption <- NULL
+  testthat::local_mocked_bindings(
+    set_caption = function(x, caption, ...) {
+      calls$caption <- caption
+      x
+    },
+    .package = "flextable"
+  )
+  with_tabtibble_render_mode("rmarkdown", with_tabtibble_backend("flextable", {
+    capture.output(render_backend_table(data.frame(x = 1), caption = "Mocked caption"))
+  }))
+  expect_identical(calls$caption, "Mocked caption")
 })
 
 test_that("under R Markdown mode, a pre-built table object gets a plain caption paragraph", {

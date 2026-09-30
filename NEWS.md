@@ -16,6 +16,20 @@
   This keeps older Rmd reports working. New `tabtibble.render_mode` and
   `tabtibble.output_target` options force the detected mode/target
   (mainly for tests, or when detection is wrong for some environment).
+* `knit_print()` no longer requires `results='asis'` on the chunk header.
+  By default (`tabtibble.knitr.auto.asis`, `TRUE`), the rendered markdown
+  is returned as `knitr::asis_output()` -- the same mechanism pander uses
+  for its `knitr.auto.asis` option -- so knitr inserts it directly whatever
+  the chunk's `results` setting. Set `options(tabtibble.knitr.auto.asis =
+  FALSE)` to go back to writing directly with `cat()` (which does need
+  `results='asis'`, and warns when it is missing).
+* **Breaking:** `print_tabtibble()`'s S3 generic no longer declares a
+  `caption` formal, so calling it directly needs none; the default method
+  still accepts `caption` (now defaulting to `NULL`) for the R Markdown
+  mode captioning above. A custom `print_fun` passed to
+  `knit_print.tab_list()` still receives the caption as before; if you
+  wrote a `print_tabtibble` method expecting a required `caption` formal
+  with no default, give it a default instead.
 * `new_tab_tibble()` gains an optional `label` column (a Quarto label,
   without the `tbl-` prefix). When absent, a stable label is derived from
   each table's caption, so re-rendering a report reproduces the same

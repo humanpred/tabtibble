@@ -29,18 +29,20 @@ This is a basic example which shows you how to solve a common problem:
 library(tabtibble)
 my_tt <- new_tab_tibble(tibble::tibble(table = list(data.frame(a = 1)), caption = "foo"))
 knit_print(my_tt)
-#> Warning in knit_print.tab_list(x$table, caption = x$caption, label = x$label, :
-#> `tab_list` printing usually requires `results='asis'` on the chunk header
-#> ::: {#tbl-foo-018cc6}
-#> 
-#> |  a|
-#> |--:|
-#> |  1|
-#> 
-#> foo
-#> 
-#> :::
 ```
+
+|   a |
+|----:|
+|   1 |
+
+foo
+
+No `results='asis'` chunk option is needed: by default
+(`tabtibble.knitr.auto.asis`, `TRUE`), `knit_print()` returns
+`knitr::asis_output()`, the same mechanism pander uses for its
+`knitr.auto.asis` option. Set
+`options(tabtibble.knitr.auto.asis = FALSE)` to opt out and write
+directly with `cat()` instead (which does need `results='asis'`).
 
 ## Quarto + Typst reports
 

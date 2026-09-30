@@ -5,23 +5,22 @@
 \alias{print_tabtibble.default}
 \title{Print a single table from a tablist}
 \usage{
-print_tabtibble(x, caption, ...)
+print_tabtibble(x, ...)
 
-\method{print_tabtibble}{default}(x, caption, ..., topic_cols = character(0))
+\method{print_tabtibble}{default}(x, caption = NULL, ..., topic_cols = character(0))
 }
 \arguments{
 \item{x}{A table to print}
 
-\item{caption}{The caption for the table. Unused by the default method:
-the caption is applied once by the surrounding cross-reference wrapper
-in \code{knit_print.tab_list()}, not by the table object itself, so it is
-not duplicated in the rendered Typst figure. Available to a custom
-\code{print_fun} (see \code{knit_print.tab_list()}) that wants it for another
-purpose.}
-
 \item{...}{Passed to the backend's table constructor
 (\code{knitr::kable()} / \code{tinytable::tt()} / \code{gt::gt()} /
 \code{flextable::flextable()}), or to \code{x}'s own \code{knit_print()} method.}
+
+\item{caption}{The table's caption, or \code{NULL} (the default). Under
+Quarto, ignored -- the crossref wrapper in \code{knit_print.tab_list()}
+applies it instead, so it is not duplicated in the rendered Typst
+figure. Under R Markdown, applied as the table's own caption (see
+\code{render_backend_table()}); \code{knit_print.tab_list()} always supplies it.}
 
 \item{topic_cols}{Character vector of column names to group into
 repeating topic headers; only used by the \code{"typst"} backend under
@@ -43,9 +42,9 @@ is already a \code{gt}, \code{tinytable}, \code{flextable}, or \code{table1} obj
 \code{new_tab_list()}) is printed via its own \code{knitr::knit_print()} method
 instead, regardless of \code{tabtibble.backend}, so a table the caller
 built with a specific package is rendered exactly as they built it;
-under R Markdown (see \code{detect_render_mode()}), \code{caption} is still
-shown for it, as a plain bold paragraph before the table, since there
-is no single API across those packages for adding a caption to an
-already-built object.
+under R Markdown (see \code{detect_render_mode()}), \code{caption} (when
+supplied) is still shown for it, as a plain bold paragraph before the
+table, since there is no single API across those packages for adding
+a caption to an already-built object.
 
 }}

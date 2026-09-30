@@ -35,12 +35,18 @@ d_tab <-
   new_tab_tibble()
 ```
 
-Then, print it! You must set `results='asis'` for the chunk printing your
-`tab_tibble`.
+Then, print it! By default (the `tabtibble.knitr.auto.asis` option, `TRUE`),
+no `results='asis'` chunk option is needed -- the same mechanism pander uses
+for its `knitr.auto.asis` option, returning the rendered markdown as
+`knitr::asis_output()` so knitr inserts it directly.
 
-```{r print, results='asis'}
+```{r print}
 knit_print(d_tab)
 ```
+
+Set `options(tabtibble.knitr.auto.asis = FALSE)` to go back to writing
+directly with `cat()` instead, which does require `results='asis'` on the
+chunk (and warns when it is missing).
 
 ## Quarto + Typst reports
 

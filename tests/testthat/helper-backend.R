@@ -17,3 +17,16 @@ with_tabtibble_render_mode <- function(mode, code) {
   on.exit(options(old), add = TRUE)
   force(code)
 }
+
+# Run `code` with `tabtibble.knitr.auto.asis` temporarily set, restoring the
+# prior option afterwards even if `code` errors. Most existing tests inspect
+# `knit_print()`'s output via `capture.output()`, which only sees the old,
+# `cat()`-based behavior (auto.asis = FALSE); they force that explicitly so
+# they keep testing what they were written to test, independent of the
+# auto-asis feature itself (see test-knit-print-asis.R for dedicated
+# auto.asis tests).
+with_tabtibble_auto_asis <- function(value, code) {
+  old <- options(tabtibble.knitr.auto.asis = value)
+  on.exit(options(old), add = TRUE)
+  force(code)
+}

@@ -75,6 +75,26 @@ test_that("render_typst_table errors on an invalid tabtibble_align value", {
   expect_error(render_typst_table(d), regexp = "must be")
 })
 
+test_that("resolve_typst_align errors when a named tabtibble_align is missing a column", {
+  d <- data.frame(n = 1, s = "a")
+  expect_error(
+    resolve_typst_align(d, c(n = "left")),
+    regexp = "missing an entry for column\\(s\\): 's'"
+  )
+})
+
+test_that("resolve_typst_align errors when an unnamed tabtibble_align has the wrong length", {
+  d <- data.frame(n = 1, s = "a")
+  expect_error(
+    resolve_typst_align(d, c("left")),
+    regexp = "must be named, or the same length"
+  )
+})
+
+test_that(".typst_header_cell(bold = FALSE) omits the bold markers", {
+  expect_identical(.typst_header_cell("x", bold = FALSE), "[x]")
+})
+
 test_that("render_typst_table handles NA cells as empty", {
   d <- data.frame(x = c(1, NA))
   out <- paste(capture.output(render_typst_table(d)), collapse = "\n")
@@ -124,7 +144,7 @@ test_that("knit_print emits the breakable-figure rule before the div, only for t
   d_tab <- new_tab_tibble(
     tibble::tibble(table = list(data.frame(x = 1)), caption = "x", label = "typ")
   )
-  with_tabtibble_render_mode("quarto", {
+  with_tabtibble_render_mode("quarto", with_tabtibble_auto_asis(FALSE, {
     with_tabtibble_backend("typst", {
       out <- capture.output(suppressWarnings(knit_print(d_tab)))
       expect_identical(out[1], "```{=typst}")
@@ -135,5 +155,5 @@ test_that("knit_print emits the breakable-figure rule before the div, only for t
       out <- capture.output(suppressWarnings(knit_print(d_tab)))
       expect_false(any(grepl("breakable: true", out, fixed = TRUE)))
     })
-  })
+  }))
 })
