@@ -5,19 +5,12 @@
 \alias{print_tabtibble.default}
 \title{Print a single table from a tablist}
 \usage{
-print_tabtibble(x, caption, ...)
+print_tabtibble(x, ...)
 
-\method{print_tabtibble}{default}(x, caption, ...)
+\method{print_tabtibble}{default}(x, ...)
 }
 \arguments{
 \item{x}{A table to print}
-
-\item{caption}{The caption for the table. Unused by the default method:
-the caption is applied once by the surrounding cross-reference wrapper
-in \code{knit_print.tab_list()}, not by the table object itself, so it is
-not duplicated in the rendered Typst figure. Available to a custom
-\code{print_fun} (see \code{knit_print.tab_list()}) that wants it for another
-purpose.}
 
 \item{...}{Passed to the backend's table constructor
 (\code{knitr::kable()} / \code{tinytable::tt()} / \code{gt::gt()} /

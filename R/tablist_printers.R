@@ -1,15 +1,15 @@
 #' Print a single table from a tablist
 #'
 #' @param x A table to print
-#' @param caption The caption for the table. Unused by the default method:
-#'   the caption is applied once by the surrounding cross-reference wrapper
-#'   in `knit_print.tab_list()`, not by the table object itself, so it is
-#'   not duplicated in the rendered Typst figure. Available to a custom
-#'   `print_fun` (see `knit_print.tab_list()`) that wants it for another
-#'   purpose.
-#' @param ... Passed to subsequent methods
+#' @param ... Passed to subsequent methods. A custom `print_fun` (see
+#'   `knit_print.tab_list()`) still receives the caption, as a named
+#'   `caption` argument there; `print_tabtibble()` itself takes no
+#'   `caption` parameter, since the default method never used it (the
+#'   caption is applied once, by the surrounding cross-reference wrapper in
+#'   `knit_print.tab_list()`, not by the table object itself, so it is not
+#'   duplicated in the rendered Typst figure).
 #' @export
-print_tabtibble <- function(x, caption, ...) {
+print_tabtibble <- function(x, ...) {
   UseMethod("print_tabtibble")
 }
 
@@ -26,7 +26,7 @@ print_tabtibble <- function(x, caption, ...) {
 #'   `flextable::flextable()`), or to `x`'s own `knit_print()` method.
 #' @returns `x`, invisibly
 #' @export
-print_tabtibble.default <- function(x, caption, ...) {
+print_tabtibble.default <- function(x, ...) {
   if (is.data.frame(x)) {
     render_backend_table(x, ...)
   } else {

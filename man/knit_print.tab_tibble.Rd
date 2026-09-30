@@ -12,7 +12,9 @@
 \item{...}{Passed to subsequent methods}
 }
 \value{
-\code{x} invisibly
+The result of \code{knit_print(x$table, ...)}: by default (see
+\code{knit_print.tab_list()}) a \code{knitr::asis_output()} value, so a chunk
+printing a \code{tab_tibble} needs no \code{results='asis'}.
 }
 \description{
 Print a tab_tibble

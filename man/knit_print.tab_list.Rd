@@ -33,7 +33,10 @@ print), \code{caption} (the caption for that data.frame), and \code{...}.}
 to omit)}
 }
 \value{
-\code{x} invisibly
+With \code{tabtibble.knitr.auto.asis} \code{TRUE} (the default), a
+\code{knitr::asis_output()} character value holding the rendered markdown.
+With it \code{FALSE}, \code{x} invisibly (the markdown is written with \code{cat()}
+as a side effect instead).
 }
 \description{
 Print a tab_list
@@ -48,6 +51,17 @@ the report template, not here). The caption is emitted once, as the
 Div's trailing paragraph, which Quarto promotes to the figure's caption;
 it is Typst/Pandoc-escaped (see \code{escape_typst()}) so caption text
 containing markup-significant characters renders literally.
+
+By default (the \code{tabtibble.knitr.auto.asis} option, \code{TRUE}), the
+rendered markdown is captured and returned as \code{knitr::asis_output()},
+the same mechanism pander uses for its \code{knitr.auto.asis} option: knitr
+inserts an asis-classed return value into the document directly,
+whatever the chunk's own \code{results} setting, so a chunk printing a
+\code{tab_tibble}/\code{tab_list} needs no \code{results='asis'} chunk option. Set
+\code{options(tabtibble.knitr.auto.asis = FALSE)} to opt out and go back to
+writing directly with \code{cat()} (requiring \code{results='asis'}, with a
+warning when it is missing) -- useful if something downstream needs to
+see the literal \code{cat()} side effect rather than a returned value.
 }
 \seealso{
 Other knitters:
