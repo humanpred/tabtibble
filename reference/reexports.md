@@ -5,4 +5,4 @@ to see their documentation.
 
 - knitr:
 
-  [`knit_print`](https://rdrr.io/pkg/knitr/man/knit_print.html)
+  [`knit_print()`](https://rdrr.io/pkg/knitr/man/knit_print.html)

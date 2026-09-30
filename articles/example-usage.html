@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Example Usage • tabtibble</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Example Usage">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tabtibble</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,481 +89,593 @@ cylinders grouped together.</p>
 <span>    caption <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Cars with {cyl} cylinders"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/new_tab_tibble.html">new_tab_tibble</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Then, print it! You must set <code>results='asis'</code> for the
-chunk printing your <code>tab_tibble</code>.</p>
+<p>Then, print it! By default (the
+<code>tabtibble.knitr.auto.asis</code> option, <code>TRUE</code>), no
+<code>results='asis'</code> chunk option is needed – the same mechanism
+pander uses for its <code>knitr.auto.asis</code> option, returning the
+rendered markdown as <code><a href="https://rdrr.io/pkg/knitr/man/asis_output.html" class="external-link">knitr::asis_output()</a></code> so knitr inserts
+it directly.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/knit_print.html" class="external-link">knit_print</a></span><span class="op">(</span><span class="va">d_tab</span><span class="op">)</span></span></code></pre></div>
-<table style="width:94%;" class="table">
+<table class="table">
 <caption>Cars with 6 cylinders</caption>
-<colgroup>
-<col width="9%">
-<col width="11%">
-<col width="8%">
-<col width="9%">
-<col width="11%">
-<col width="11%">
-<col width="6%">
-<col width="6%">
-<col width="9%">
-<col width="9%">
-</colgroup>
 <thead><tr class="header">
-<th align="center">mpg</th>
-<th align="center">disp</th>
-<th align="center">hp</th>
-<th align="center">drat</th>
-<th align="center">wt</th>
-<th align="center">qsec</th>
-<th align="center">vs</th>
-<th align="center">am</th>
-<th align="center">gear</th>
-<th align="center">carb</th>
+<th align="right">mpg</th>
+<th align="right">disp</th>
+<th align="right">hp</th>
+<th align="right">drat</th>
+<th align="right">wt</th>
+<th align="right">qsec</th>
+<th align="right">vs</th>
+<th align="right">am</th>
+<th align="right">gear</th>
+<th align="right">carb</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="center">21</td>
-<td align="center">160</td>
-<td align="center">110</td>
-<td align="center">3.9</td>
-<td align="center">2.62</td>
-<td align="center">16.46</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">4</td>
-<td align="center">4</td>
+<td align="right">21.0</td>
+<td align="right">160.0</td>
+<td align="right">110</td>
+<td align="right">3.90</td>
+<td align="right">2.620</td>
+<td align="right">16.46</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
 </tr>
 <tr class="even">
-<td align="center">21</td>
-<td align="center">160</td>
-<td align="center">110</td>
-<td align="center">3.9</td>
-<td align="center">2.875</td>
-<td align="center">17.02</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">4</td>
-<td align="center">4</td>
+<td align="right">21.0</td>
+<td align="right">160.0</td>
+<td align="right">110</td>
+<td align="right">3.90</td>
+<td align="right">2.875</td>
+<td align="right">17.02</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="center">21.4</td>
-<td align="center">258</td>
-<td align="center">110</td>
-<td align="center">3.08</td>
-<td align="center">3.215</td>
-<td align="center">19.44</td>
-<td align="center">1</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">1</td>
+<td align="right">21.4</td>
+<td align="right">258.0</td>
+<td align="right">110</td>
+<td align="right">3.08</td>
+<td align="right">3.215</td>
+<td align="right">19.44</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="center">18.1</td>
-<td align="center">225</td>
-<td align="center">105</td>
-<td align="center">2.76</td>
-<td align="center">3.46</td>
-<td align="center">20.22</td>
-<td align="center">1</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">1</td>
+<td align="right">18.1</td>
+<td align="right">225.0</td>
+<td align="right">105</td>
+<td align="right">2.76</td>
+<td align="right">3.460</td>
+<td align="right">20.22</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="center">19.2</td>
-<td align="center">167.6</td>
-<td align="center">123</td>
-<td align="center">3.92</td>
-<td align="center">3.44</td>
-<td align="center">18.3</td>
-<td align="center">1</td>
-<td align="center">0</td>
-<td align="center">4</td>
-<td align="center">4</td>
+<td align="right">19.2</td>
+<td align="right">167.6</td>
+<td align="right">123</td>
+<td align="right">3.92</td>
+<td align="right">3.440</td>
+<td align="right">18.30</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">4</td>
 </tr>
 <tr class="even">
-<td align="center">17.8</td>
-<td align="center">167.6</td>
-<td align="center">123</td>
-<td align="center">3.92</td>
-<td align="center">3.44</td>
-<td align="center">18.9</td>
-<td align="center">1</td>
-<td align="center">0</td>
-<td align="center">4</td>
-<td align="center">4</td>
+<td align="right">17.8</td>
+<td align="right">167.6</td>
+<td align="right">123</td>
+<td align="right">3.92</td>
+<td align="right">3.440</td>
+<td align="right">18.90</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="center">19.7</td>
-<td align="center">145</td>
-<td align="center">175</td>
-<td align="center">3.62</td>
-<td align="center">2.77</td>
-<td align="center">15.5</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">5</td>
-<td align="center">6</td>
+<td align="right">19.7</td>
+<td align="right">145.0</td>
+<td align="right">175</td>
+<td align="right">3.62</td>
+<td align="right">2.770</td>
+<td align="right">15.50</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">6</td>
 </tr>
 </tbody>
 </table>
-<table style="width:94%;" class="table">
+<table class="table">
 <caption>Cars with 4 cylinders</caption>
-<colgroup>
-<col width="9%">
-<col width="11%">
-<col width="8%">
-<col width="9%">
-<col width="11%">
-<col width="11%">
-<col width="6%">
-<col width="6%">
-<col width="9%">
-<col width="9%">
-</colgroup>
 <thead><tr class="header">
-<th align="center">mpg</th>
-<th align="center">disp</th>
-<th align="center">hp</th>
-<th align="center">drat</th>
-<th align="center">wt</th>
-<th align="center">qsec</th>
-<th align="center">vs</th>
-<th align="center">am</th>
-<th align="center">gear</th>
-<th align="center">carb</th>
+<th align="right">mpg</th>
+<th align="right">disp</th>
+<th align="right">hp</th>
+<th align="right">drat</th>
+<th align="right">wt</th>
+<th align="right">qsec</th>
+<th align="right">vs</th>
+<th align="right">am</th>
+<th align="right">gear</th>
+<th align="right">carb</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="center">22.8</td>
-<td align="center">108</td>
-<td align="center">93</td>
-<td align="center">3.85</td>
-<td align="center">2.32</td>
-<td align="center">18.61</td>
-<td align="center">1</td>
-<td align="center">1</td>
-<td align="center">4</td>
-<td align="center">1</td>
+<td align="right">22.8</td>
+<td align="right">108.0</td>
+<td align="right">93</td>
+<td align="right">3.85</td>
+<td align="right">2.320</td>
+<td align="right">18.61</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="center">24.4</td>
-<td align="center">146.7</td>
-<td align="center">62</td>
-<td align="center">3.69</td>
-<td align="center">3.19</td>
-<td align="center">20</td>
-<td align="center">1</td>
-<td align="center">0</td>
-<td align="center">4</td>
-<td align="center">2</td>
+<td align="right">24.4</td>
+<td align="right">146.7</td>
+<td align="right">62</td>
+<td align="right">3.69</td>
+<td align="right">3.190</td>
+<td align="right">20.00</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="center">22.8</td>
-<td align="center">140.8</td>
-<td align="center">95</td>
-<td align="center">3.92</td>
-<td align="center">3.15</td>
-<td align="center">22.9</td>
-<td align="center">1</td>
-<td align="center">0</td>
-<td align="center">4</td>
-<td align="center">2</td>
+<td align="right">22.8</td>
+<td align="right">140.8</td>
+<td align="right">95</td>
+<td align="right">3.92</td>
+<td align="right">3.150</td>
+<td align="right">22.90</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
-<td align="center">32.4</td>
-<td align="center">78.7</td>
-<td align="center">66</td>
-<td align="center">4.08</td>
-<td align="center">2.2</td>
-<td align="center">19.47</td>
-<td align="center">1</td>
-<td align="center">1</td>
-<td align="center">4</td>
-<td align="center">1</td>
+<td align="right">32.4</td>
+<td align="right">78.7</td>
+<td align="right">66</td>
+<td align="right">4.08</td>
+<td align="right">2.200</td>
+<td align="right">19.47</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="center">30.4</td>
-<td align="center">75.7</td>
-<td align="center">52</td>
-<td align="center">4.93</td>
-<td align="center">1.615</td>
-<td align="center">18.52</td>
-<td align="center">1</td>
-<td align="center">1</td>
-<td align="center">4</td>
-<td align="center">2</td>
+<td align="right">30.4</td>
+<td align="right">75.7</td>
+<td align="right">52</td>
+<td align="right">4.93</td>
+<td align="right">1.615</td>
+<td align="right">18.52</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
-<td align="center">33.9</td>
-<td align="center">71.1</td>
-<td align="center">65</td>
-<td align="center">4.22</td>
-<td align="center">1.835</td>
-<td align="center">19.9</td>
-<td align="center">1</td>
-<td align="center">1</td>
-<td align="center">4</td>
-<td align="center">1</td>
+<td align="right">33.9</td>
+<td align="right">71.1</td>
+<td align="right">65</td>
+<td align="right">4.22</td>
+<td align="right">1.835</td>
+<td align="right">19.90</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="center">21.5</td>
-<td align="center">120.1</td>
-<td align="center">97</td>
-<td align="center">3.7</td>
-<td align="center">2.465</td>
-<td align="center">20.01</td>
-<td align="center">1</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">1</td>
+<td align="right">21.5</td>
+<td align="right">120.1</td>
+<td align="right">97</td>
+<td align="right">3.70</td>
+<td align="right">2.465</td>
+<td align="right">20.01</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="center">27.3</td>
-<td align="center">79</td>
-<td align="center">66</td>
-<td align="center">4.08</td>
-<td align="center">1.935</td>
-<td align="center">18.9</td>
-<td align="center">1</td>
-<td align="center">1</td>
-<td align="center">4</td>
-<td align="center">1</td>
+<td align="right">27.3</td>
+<td align="right">79.0</td>
+<td align="right">66</td>
+<td align="right">4.08</td>
+<td align="right">1.935</td>
+<td align="right">18.90</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="center">26</td>
-<td align="center">120.3</td>
-<td align="center">91</td>
-<td align="center">4.43</td>
-<td align="center">2.14</td>
-<td align="center">16.7</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">5</td>
-<td align="center">2</td>
+<td align="right">26.0</td>
+<td align="right">120.3</td>
+<td align="right">91</td>
+<td align="right">4.43</td>
+<td align="right">2.140</td>
+<td align="right">16.70</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
-<td align="center">30.4</td>
-<td align="center">95.1</td>
-<td align="center">113</td>
-<td align="center">3.77</td>
-<td align="center">1.513</td>
-<td align="center">16.9</td>
-<td align="center">1</td>
-<td align="center">1</td>
-<td align="center">5</td>
-<td align="center">2</td>
+<td align="right">30.4</td>
+<td align="right">95.1</td>
+<td align="right">113</td>
+<td align="right">3.77</td>
+<td align="right">1.513</td>
+<td align="right">16.90</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="center">21.4</td>
-<td align="center">121</td>
-<td align="center">109</td>
-<td align="center">4.11</td>
-<td align="center">2.78</td>
-<td align="center">18.6</td>
-<td align="center">1</td>
-<td align="center">1</td>
-<td align="center">4</td>
-<td align="center">2</td>
+<td align="right">21.4</td>
+<td align="right">121.0</td>
+<td align="right">109</td>
+<td align="right">4.11</td>
+<td align="right">2.780</td>
+<td align="right">18.60</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">2</td>
 </tr>
 </tbody>
 </table>
-<table style="width:94%;" class="table">
+<table class="table">
 <caption>Cars with 8 cylinders</caption>
-<colgroup>
-<col width="9%">
-<col width="11%">
-<col width="8%">
-<col width="9%">
-<col width="11%">
-<col width="11%">
-<col width="6%">
-<col width="6%">
-<col width="9%">
-<col width="9%">
-</colgroup>
 <thead><tr class="header">
-<th align="center">mpg</th>
-<th align="center">disp</th>
-<th align="center">hp</th>
-<th align="center">drat</th>
-<th align="center">wt</th>
-<th align="center">qsec</th>
-<th align="center">vs</th>
-<th align="center">am</th>
-<th align="center">gear</th>
-<th align="center">carb</th>
+<th align="right">mpg</th>
+<th align="right">disp</th>
+<th align="right">hp</th>
+<th align="right">drat</th>
+<th align="right">wt</th>
+<th align="right">qsec</th>
+<th align="right">vs</th>
+<th align="right">am</th>
+<th align="right">gear</th>
+<th align="right">carb</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="center">18.7</td>
-<td align="center">360</td>
-<td align="center">175</td>
-<td align="center">3.15</td>
-<td align="center">3.44</td>
-<td align="center">17.02</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">2</td>
+<td align="right">18.7</td>
+<td align="right">360.0</td>
+<td align="right">175</td>
+<td align="right">3.15</td>
+<td align="right">3.440</td>
+<td align="right">17.02</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
-<td align="center">14.3</td>
-<td align="center">360</td>
-<td align="center">245</td>
-<td align="center">3.21</td>
-<td align="center">3.57</td>
-<td align="center">15.84</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">4</td>
+<td align="right">14.3</td>
+<td align="right">360.0</td>
+<td align="right">245</td>
+<td align="right">3.21</td>
+<td align="right">3.570</td>
+<td align="right">15.84</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="center">16.4</td>
-<td align="center">275.8</td>
-<td align="center">180</td>
-<td align="center">3.07</td>
-<td align="center">4.07</td>
-<td align="center">17.4</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">3</td>
+<td align="right">16.4</td>
+<td align="right">275.8</td>
+<td align="right">180</td>
+<td align="right">3.07</td>
+<td align="right">4.070</td>
+<td align="right">17.40</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">3</td>
 </tr>
 <tr class="even">
-<td align="center">17.3</td>
-<td align="center">275.8</td>
-<td align="center">180</td>
-<td align="center">3.07</td>
-<td align="center">3.73</td>
-<td align="center">17.6</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">3</td>
+<td align="right">17.3</td>
+<td align="right">275.8</td>
+<td align="right">180</td>
+<td align="right">3.07</td>
+<td align="right">3.730</td>
+<td align="right">17.60</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">3</td>
 </tr>
 <tr class="odd">
-<td align="center">15.2</td>
-<td align="center">275.8</td>
-<td align="center">180</td>
-<td align="center">3.07</td>
-<td align="center">3.78</td>
-<td align="center">18</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">3</td>
+<td align="right">15.2</td>
+<td align="right">275.8</td>
+<td align="right">180</td>
+<td align="right">3.07</td>
+<td align="right">3.780</td>
+<td align="right">18.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">3</td>
 </tr>
 <tr class="even">
-<td align="center">10.4</td>
-<td align="center">472</td>
-<td align="center">205</td>
-<td align="center">2.93</td>
-<td align="center">5.25</td>
-<td align="center">17.98</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">4</td>
+<td align="right">10.4</td>
+<td align="right">472.0</td>
+<td align="right">205</td>
+<td align="right">2.93</td>
+<td align="right">5.250</td>
+<td align="right">17.98</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="center">10.4</td>
-<td align="center">460</td>
-<td align="center">215</td>
-<td align="center">3</td>
-<td align="center">5.424</td>
-<td align="center">17.82</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">4</td>
+<td align="right">10.4</td>
+<td align="right">460.0</td>
+<td align="right">215</td>
+<td align="right">3.00</td>
+<td align="right">5.424</td>
+<td align="right">17.82</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">4</td>
 </tr>
 <tr class="even">
-<td align="center">14.7</td>
-<td align="center">440</td>
-<td align="center">230</td>
-<td align="center">3.23</td>
-<td align="center">5.345</td>
-<td align="center">17.42</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">4</td>
+<td align="right">14.7</td>
+<td align="right">440.0</td>
+<td align="right">230</td>
+<td align="right">3.23</td>
+<td align="right">5.345</td>
+<td align="right">17.42</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="center">15.5</td>
-<td align="center">318</td>
-<td align="center">150</td>
-<td align="center">2.76</td>
-<td align="center">3.52</td>
-<td align="center">16.87</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">2</td>
+<td align="right">15.5</td>
+<td align="right">318.0</td>
+<td align="right">150</td>
+<td align="right">2.76</td>
+<td align="right">3.520</td>
+<td align="right">16.87</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
-<td align="center">15.2</td>
-<td align="center">304</td>
-<td align="center">150</td>
-<td align="center">3.15</td>
-<td align="center">3.435</td>
-<td align="center">17.3</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">2</td>
+<td align="right">15.2</td>
+<td align="right">304.0</td>
+<td align="right">150</td>
+<td align="right">3.15</td>
+<td align="right">3.435</td>
+<td align="right">17.30</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="center">13.3</td>
-<td align="center">350</td>
-<td align="center">245</td>
-<td align="center">3.73</td>
-<td align="center">3.84</td>
-<td align="center">15.41</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">4</td>
+<td align="right">13.3</td>
+<td align="right">350.0</td>
+<td align="right">245</td>
+<td align="right">3.73</td>
+<td align="right">3.840</td>
+<td align="right">15.41</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">4</td>
 </tr>
 <tr class="even">
-<td align="center">19.2</td>
-<td align="center">400</td>
-<td align="center">175</td>
-<td align="center">3.08</td>
-<td align="center">3.845</td>
-<td align="center">17.05</td>
-<td align="center">0</td>
-<td align="center">0</td>
-<td align="center">3</td>
-<td align="center">2</td>
+<td align="right">19.2</td>
+<td align="right">400.0</td>
+<td align="right">175</td>
+<td align="right">3.08</td>
+<td align="right">3.845</td>
+<td align="right">17.05</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="center">15.8</td>
-<td align="center">351</td>
-<td align="center">264</td>
-<td align="center">4.22</td>
-<td align="center">3.17</td>
-<td align="center">14.5</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">5</td>
-<td align="center">4</td>
+<td align="right">15.8</td>
+<td align="right">351.0</td>
+<td align="right">264</td>
+<td align="right">4.22</td>
+<td align="right">3.170</td>
+<td align="right">14.50</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">4</td>
 </tr>
 <tr class="even">
-<td align="center">15</td>
-<td align="center">301</td>
-<td align="center">335</td>
-<td align="center">3.54</td>
-<td align="center">3.57</td>
-<td align="center">14.6</td>
-<td align="center">0</td>
-<td align="center">1</td>
-<td align="center">5</td>
-<td align="center">8</td>
+<td align="right">15.0</td>
+<td align="right">301.0</td>
+<td align="right">335</td>
+<td align="right">3.54</td>
+<td align="right">3.570</td>
+<td align="right">14.60</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">8</td>
 </tr>
 </tbody>
-</table></main>
+</table>
+<p>Set <code>options(tabtibble.knitr.auto.asis = FALSE)</code> to go
+back to writing directly with <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code> instead, which does
+require <code>results='asis'</code> on the chunk (and warns when it is
+missing).</p>
+<div class="section level2">
+<h2 id="quarto-typst-reports">Quarto + Typst reports<a class="anchor" aria-label="anchor" href="#quarto-typst-reports"></a>
+</h2>
+<p>Each table is wrapped in a fenced Div with a Quarto label
+(<code>#tbl-&lt;label&gt;</code>), so it can be cross-referenced with
+<code>@tbl-&lt;label&gt;</code> and, when the report is rendered to a
+Typst PDF, appears in a Typst list of tables. Add a label column when
+you want to choose the label yourself; otherwise a stable one is derived
+from the caption, so re-rendering the same report reproduces the same
+labels:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">d_tab_labelled</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">nest</a></span><span class="op">(</span>table <span class="op">=</span> <span class="op">!</span><span class="st">"cyl"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    caption <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"Cars with {cyl} cylinders"</span><span class="op">)</span>,</span>
+<span>    label <span class="op">=</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue</a></span><span class="op">(</span><span class="st">"cyl-{cyl}"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/new_tab_tibble.html">new_tab_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">d_tab_labelled</span><span class="op">$</span><span class="va">label</span></span>
+<span><span class="co">#&gt; [1] "cyl-6" "cyl-4" "cyl-8"</span></span></code></pre></div>
+<p>In the Typst document, add a list of tables near the top with:</p>
+<pre><code>```{=typst}
+#outline(title: [List of Tables], target: figure.where(kind: "quarto-float-tbl"))
+```</code></pre>
+<p>(<code>"quarto-float-tbl"</code> is Quarto’s own kind string for a
+crossreferenceable table from computational output; the native Typst
+<code>table</code> kind is for tables written directly in Typst
+source.)</p>
+</div>
+<div class="section level2">
+<h2 id="rendering-backends">Rendering backends<a class="anchor" aria-label="anchor" href="#rendering-backends"></a>
+</h2>
+<p>By default, each table is rendered as a Markdown (pipe) table via
+<code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code>, so <code>tabtibble</code> itself needs no
+extra table-formatting package. Set the <code>tabtibble.backend</code>
+option to <code>"tinytable"</code>, <code>"gt"</code>, or
+<code>"flextable"</code> to render plain data.frame tables with that
+package instead (each package is only required when you select its
+backend):</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tabtibble.backend <span class="op">=</span> <span class="st">"tinytable"</span><span class="op">)</span></span></code></pre></div>
+<p>A table you already built with <code>gt</code>,
+<code>tinytable</code>, <code>flextable</code>, or <code>table1</code>
+is printed exactly as you built it, using that package’s own printing
+method, regardless of <code>tabtibble.backend</code>.</p>
+<p>Caption and cell text containing Typst-significant characters
+(<code>* _ # @ $ &lt; &gt; \</code> [
+]<code>or a backslash) render literally;</code>tabtibble` escapes them
+once, for every backend, so you never need to escape them yourself.</p>
+</div>
+<div class="section level2">
+<h2 id="topic-grouped-listings-typst-backend">Topic-grouped listings (<code>"typst"</code> backend)<a class="anchor" aria-label="anchor" href="#topic-grouped-listings-typst-backend"></a>
+</h2>
+<p>The <code>"typst"</code> backend reproduces what LaTeX’s
+TopicLongTable gave: a listing sorted by one or more “topic” columns
+(for example subject, then analyte) that prints each topic value once,
+as a group header above its rows, instead of repeating it on every row.
+When the group runs onto the next page, the column header and the
+current topic repeat at the top of that page, so a reader never sees a
+page of data with no idea which subject it belongs to. Declare the topic
+columns with <code>topic_cols</code>; the underlying table must already
+be sorted by them:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">conc</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>    subject <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S001"</span>, <span class="st">"S002"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span>
+<span>    time    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2</span>, times <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    conc    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5.1</span>, <span class="fl">4.3</span>, <span class="fl">0</span>, <span class="fl">6.0</span>, <span class="fl">5.2</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">d_tab_topic</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>    table      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">conc</span><span class="op">)</span>,</span>
+<span>    caption    <span class="op">=</span> <span class="st">"Concentrations by subject"</span>,</span>
+<span>    label      <span class="op">=</span> <span class="st">"conc-by-subject"</span>,</span>
+<span>    topic_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"subject"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/new_tab_tibble.html">new_tab_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tabtibble.backend <span class="op">=</span> <span class="st">"typst"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/knit_print.html" class="external-link">knit_print</a></span><span class="op">(</span><span class="va">d_tab_topic</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Concentrations by subject</caption>
+<thead><tr class="header">
+<th align="left">subject</th>
+<th align="right">time</th>
+<th align="right">conc</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">S001</td>
+<td align="right">0</td>
+<td align="right">0.0</td>
+</tr>
+<tr class="even">
+<td align="left">S001</td>
+<td align="right">1</td>
+<td align="right">5.1</td>
+</tr>
+<tr class="odd">
+<td align="left">S001</td>
+<td align="right">2</td>
+<td align="right">4.3</td>
+</tr>
+<tr class="even">
+<td align="left">S002</td>
+<td align="right">0</td>
+<td align="right">0.0</td>
+</tr>
+<tr class="odd">
+<td align="left">S002</td>
+<td align="right">1</td>
+<td align="right">6.0</td>
+</tr>
+<tr class="even">
+<td align="left">S002</td>
+<td align="right">2</td>
+<td align="right">5.2</td>
+</tr>
+</tbody>
+</table>
+<p>Without <code>topic_cols</code>, the <code>"typst"</code> backend is
+an ordinary table whose column header repeats on every page. The other
+backends ignore <code>topic_cols</code> gracefully: the named columns
+stay as ordinary columns, so their values just repeat on every row.</p>
+<p>Column alignment defaults to right for numeric columns and left for
+everything else; override it with a <code>tabtibble_align</code>
+attribute (a named character vector of <code>"left"</code>,
+<code>"right"</code>, or <code>"center"</code>) set on the table before
+calling <code><a href="../reference/new_tab_tibble.html">new_tab_tibble()</a></code>:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">conc</span>, <span class="st">"tabtibble_align"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>subject <span class="op">=</span> <span class="st">"left"</span>, time <span class="op">=</span> <span class="st">"center"</span>, conc <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span>
+<span><span class="va">d_tab_topic_aligned</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>table <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">conc</span><span class="op">)</span>, caption <span class="op">=</span> <span class="st">"Aligned columns"</span>, topic_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"subject"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/new_tab_tibble.html">new_tab_tibble</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
@@ -573,7 +685,7 @@ chunk printing your <code>tab_tibble</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -11,12 +11,12 @@ Source:
 [`DESCRIPTION`](https://github.com/humanpred/tabtibble/blob/main/DESCRIPTION)
 
 Denney B (2026). *tabtibble: Simplify Reporting Many Tables*. R package
-version 0.0.1.9000, <https://github.com/humanpred/tabtibble>.
+version 0.0.2.9000, <https://github.com/humanpred/tabtibble>.
 
     @Manual{,
       title = {tabtibble: Simplify Reporting Many Tables},
       author = {Bill Denney},
       year = {2026},
-      note = {R package version 0.0.1.9000},
+      note = {R package version 0.0.2.9000},
       url = {https://github.com/humanpred/tabtibble},
     }

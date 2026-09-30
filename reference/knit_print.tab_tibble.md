@@ -21,7 +21,11 @@ knit_print(x, ...)
 
 ## Value
 
-`x` invisibly
+The result of `knit_print(x$table, ...)`: by default (see
+[`knit_print.tab_list()`](https://humanpred.github.io/tabtibble/reference/knit_print.tab_list.md))
+a
+[`knitr::asis_output()`](https://rdrr.io/pkg/knitr/man/asis_output.html)
+value, so a chunk printing a `tab_tibble` needs no `results='asis'`.
 
 ## See also
 

@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Simplify Reporting Many Tables • tabtibble</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Simplify Reporting Many Tables">
 <meta name="description" content="Simplify reporting many tables by creating tibbles of tables. With tabtibble, a tibble of tables is created with captions and automatic printing using knit_print().">
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">tabtibble</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,6 +73,21 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/humanpred/tabtibble" class="external-link">tabtibble</a></span><span class="op">)</span></span>
 <span><span class="va">my_tt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/new_tab_tibble.html">new_tab_tibble</a></span><span class="op">(</span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>table <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, caption <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/knit_print.html" class="external-link">knit_print</a></span><span class="op">(</span><span class="va">my_tt</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th align="right">a</th>
+</tr></thead>
+<tbody><tr>
+<td align="right">1</td>
+</tr></tbody>
+</table>
+<p>foo</p>
+<p>No <code>results='asis'</code> chunk option is needed: by default (<code>tabtibble.knitr.auto.asis</code>, <code>TRUE</code>), <code><a href="https://rdrr.io/pkg/knitr/man/knit_print.html" class="external-link">knit_print()</a></code> returns <code><a href="https://rdrr.io/pkg/knitr/man/asis_output.html" class="external-link">knitr::asis_output()</a></code>, the same mechanism pander uses for its <code>knitr.auto.asis</code> option. Set <code>options(tabtibble.knitr.auto.asis = FALSE)</code> to opt out and write directly with <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code> instead (which does need <code>results='asis'</code>).</p>
+</div>
+<div class="section level2">
+<h2 id="quarto--typst-reports">Quarto + Typst reports<a class="anchor" aria-label="anchor" href="#quarto--typst-reports"></a>
+</h2>
+<p>Each table is wrapped in a fenced Div with a Quarto label (<code>#tbl-&lt;label&gt;</code>), derived automatically from its caption when not supplied, so it can be cross-referenced with <code>@tbl-&lt;label&gt;</code> and appears in a Typst list of tables when the report is rendered to a Typst PDF. Tables can be rendered as Markdown (the default, no extra dependency), or with <code>tinytable</code>, <code>gt</code>, <code>flextable</code>, or natively in <code>typst</code> (which also supports topic-grouped listings, reproducing LaTeX’s TopicLongTable – a group value is printed once, above its rows, and repeats at the top of each page the group continues onto) via the <code>tabtibble.backend</code> option. See <code><a href="articles/example-usage.html">vignette("example-usage", package = "tabtibble")</a></code> for details.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -124,7 +139,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
