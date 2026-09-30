@@ -18,15 +18,23 @@ knit_print.tab_tibble <- function(x, ...) {
 #'
 #' @details
 #' Individual tables are printed with the `print_tabtibble()` S3 generic
-#' function. Each table is wrapped in a fenced Div with id `#tbl-<label>`
-#' (Quarto's syntax for a crossreferenceable table from computational
-#' output), so `@tbl-<label>` resolves and, when the report target is Typst,
-#' the table appears in a Typst `#outline(target: figure.where(kind:
-#' "quarto-float-tbl"))` (the list of tables; that outline call belongs in
-#' the report template, not here). The caption is emitted once, as the
-#' Div's trailing paragraph, which Quarto promotes to the figure's caption;
-#' it is Typst/Pandoc-escaped (see `escape_typst()`) so caption text
-#' containing markup-significant characters renders literally.
+#' function. Under Quarto (see `detect_render_mode()`), each table is
+#' wrapped in a fenced Div with id `#tbl-<label>` (Quarto's syntax for a
+#' crossreferenceable table from computational output), so `@tbl-<label>`
+#' resolves and, when the report target is Typst, the table appears in a
+#' Typst `#outline(target: figure.where(kind: "quarto-float-tbl"))` (the
+#' list of tables; that outline call belongs in the report template, not
+#' here). The caption is emitted once, as the Div's trailing paragraph,
+#' which Quarto promotes to the figure's caption; it is Typst/Pandoc-escaped
+#' (see `escape_typst()`) so caption text containing markup-significant
+#' characters renders literally.
+#'
+#' Under plain R Markdown, that Div is skipped: rendered by plain Pandoc
+#' (no Quarto filter to interpret it), it would show up as a literal,
+#' uncaptioned wrapper rather than a table figure. Instead, each table
+#' carries an ordinary caption the output target understands -- see
+#' `render_backend_table()` -- so a report that never used Quarto keeps
+#' working exactly as it did before crossref support was added.
 #'
 #' @param x The `tab_list` object to print
 #' @param ... passed to `print_fun`
@@ -68,20 +76,25 @@ knit_print.tab_list <- function(x, ..., caption, label = NULL, topic_cols = NULL
     warning("`tab_list` printing usually requires `results='asis'` on the chunk header")
   }
   backend <- getOption("tabtibble.backend", "markdown")
+  mode <- detect_render_mode()
   for (idx in seq_along(x)) {
     if (!is.null(tab_prefix)) {
       cat(tab_prefix)
     }
-    if (is.null(print_fun) && identical(backend, "typst") && is.data.frame(x[[idx]])) {
-      emit_typst_breakable_figure_rule()
+    if (identical(mode, "quarto")) {
+      if (is.null(print_fun) && identical(backend, "typst") && is.data.frame(x[[idx]])) {
+        emit_typst_breakable_figure_rule()
+      }
+      cat("::: {#tbl-", label[[idx]], "}\n\n", sep = "")
     }
-    cat("::: {#tbl-", label[[idx]], "}\n\n", sep = "")
     if (is.null(print_fun)) {
       print_tabtibble(x = x[[idx]], caption = caption[[idx]], topic_cols = topic_cols[[idx]], ...)
     } else {
       print_fun(x = x[[idx]], caption = caption[[idx]], ...)
     }
-    cat("\n", escape_typst(as.character(caption[[idx]])), "\n\n:::\n", sep = "")
+    if (identical(mode, "quarto")) {
+      cat("\n", escape_typst(as.character(caption[[idx]])), "\n\n:::\n", sep = "")
+    }
     if (!is.null(tab_suffix)) {
       cat(tab_suffix)
     }

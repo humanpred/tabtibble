@@ -1,4 +1,4 @@
-test_that("knit_print emits the exact expected markdown for a fixture table", {
+test_that("knit_print emits the exact expected markdown for a fixture table under Quarto", {
   d_tab <- new_tab_tibble(
     tibble::tibble(
       table   = list(data.frame(x = 1:2, y = c("a", "b"))),
@@ -6,7 +6,7 @@ test_that("knit_print emits the exact expected markdown for a fixture table", {
       label   = "fixture"
     )
   )
-  out <- capture.output(suppressWarnings(knit_print(d_tab)))
+  out <- with_tabtibble_render_mode("quarto", capture.output(suppressWarnings(knit_print(d_tab))))
   expect_identical(
     out,
     c(

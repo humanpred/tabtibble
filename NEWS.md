@@ -1,5 +1,21 @@
 # tabtibble (development version)
 
+* `knit_print()` now detects whether it is rendering under Quarto or plain
+  R Markdown/knitr (`knitr::opts_knit$get("quarto.version")`, falling back
+  to the `QUARTO_PROJECT_ROOT`/`QUARTO_DOCUMENT_PATH` environment
+  variables). Under Quarto, behavior is unchanged: each table keeps its
+  crossref div (the `"typst"` backend only makes sense there, and now
+  falls back to the `"markdown"` backend outside Quarto). Under plain R
+  Markdown, that div is skipped -- rendered by plain Pandoc it would show
+  up as literal, uncaptioned text -- and each table instead gets an
+  ordinary caption the output target understands: `knitr::kable()`'s own
+  `caption` for the markdown backend (in its native format for the
+  detected target -- `detect_output_target()` reports `"typst"`,
+  `"latex"`, `"html"`, `"docx"`, or `"other"` -- rather than always a
+  Markdown pipe table), or `tinytable`/`gt`/`flextable`'s own captioning.
+  This keeps older Rmd reports working. New `tabtibble.render_mode` and
+  `tabtibble.output_target` options force the detected mode/target
+  (mainly for tests, or when detection is wrong for some environment).
 * `new_tab_tibble()` gains an optional `label` column (a Quarto label,
   without the `tbl-` prefix). When absent, a stable label is derived from
   each table's caption, so re-rendering a report reproduces the same

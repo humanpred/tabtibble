@@ -81,13 +81,22 @@ test_that("render_typst_table handles NA cells as empty", {
   expect_match(out, "[]", fixed = TRUE)
 })
 
-test_that("render_backend_table dispatches to the typst backend", {
+test_that("render_backend_table dispatches to the typst backend under Quarto", {
   d <- data.frame(x = 1)
-  with_tabtibble_backend("typst", {
+  with_tabtibble_render_mode("quarto", with_tabtibble_backend("typst", {
     out <- paste(capture.output(render_backend_table(d)), collapse = "\n")
     expect_match(out, "{=typst}", fixed = TRUE)
     expect_match(out, "#table(", fixed = TRUE)
-  })
+  }))
+})
+
+test_that("render_backend_table falls back to markdown for the typst backend outside Quarto", {
+  d <- data.frame(x = 1)
+  with_tabtibble_render_mode("rmarkdown", with_tabtibble_backend("typst", {
+    out <- paste(capture.output(render_backend_table(d)), collapse = "\n")
+    expect_no_match(out, "{=typst}", fixed = TRUE)
+    expect_match(out, "|", fixed = TRUE)
+  }))
 })
 
 test_that("markdown/tinytable/gt/flextable backends ignore topic_cols gracefully (values repeat)", {
@@ -111,18 +120,20 @@ test_that("emit_typst_breakable_figure_rule emits the expected raw block", {
   )
 })
 
-test_that("knit_print emits the breakable-figure rule before the div, only for the typst backend", {
+test_that("knit_print emits the breakable-figure rule before the div, only for the typst backend under Quarto", {
   d_tab <- new_tab_tibble(
     tibble::tibble(table = list(data.frame(x = 1)), caption = "x", label = "typ")
   )
-  with_tabtibble_backend("typst", {
-    out <- capture.output(suppressWarnings(knit_print(d_tab)))
-    expect_identical(out[1], "```{=typst}")
-    expect_true(any(grepl("breakable: true", out, fixed = TRUE)))
-    expect_true(which(grepl("breakable: true", out, fixed = TRUE)) < which(out == "::: {#tbl-typ}"))
-  })
-  with_tabtibble_backend("markdown", {
-    out <- capture.output(suppressWarnings(knit_print(d_tab)))
-    expect_false(any(grepl("breakable: true", out, fixed = TRUE)))
+  with_tabtibble_render_mode("quarto", {
+    with_tabtibble_backend("typst", {
+      out <- capture.output(suppressWarnings(knit_print(d_tab)))
+      expect_identical(out[1], "```{=typst}")
+      expect_true(any(grepl("breakable: true", out, fixed = TRUE)))
+      expect_true(which(grepl("breakable: true", out, fixed = TRUE)) < which(out == "::: {#tbl-typ}"))
+    })
+    with_tabtibble_backend("markdown", {
+      out <- capture.output(suppressWarnings(knit_print(d_tab)))
+      expect_false(any(grepl("breakable: true", out, fixed = TRUE)))
+    })
   })
 })

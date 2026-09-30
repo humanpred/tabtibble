@@ -4,16 +4,21 @@
 \alias{render_backend_table}
 \title{Render a plain data.frame table body through the selected backend}
 \usage{
-render_backend_table(x, topic_cols = character(0), ...)
+render_backend_table(x, topic_cols = character(0), caption = NULL, ...)
 }
 \arguments{
 \item{x}{A data.frame.}
 
 \item{topic_cols}{Character vector of column names to group into
 repeating topic headers (see \code{render_typst_table()}); only used by the
-\code{"typst"} backend. The other backends ignore it gracefully -- the named
+\code{"typst"} backend under Quarto. The other backends -- and \code{"typst"}
+itself outside Quarto, see below -- ignore it gracefully: the named
 columns stay as ordinary columns, so their values repeat on every row,
 as if \code{topic_cols} had not been set.}
+
+\item{caption}{The table's caption, or \code{NULL}. Ignored under Quarto (the
+crossref wrapper in \code{knit_print.tab_list()} applies it instead); under
+R Markdown, applied via the backend's own captioning (see above).}
 
 \item{...}{Passed to the backend's table constructor
 (\code{knitr::kable()} / \code{tinytable::tt()} / \code{gt::gt()} /

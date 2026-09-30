@@ -24,8 +24,8 @@ purpose.}
 \code{flextable::flextable()}), or to \code{x}'s own \code{knit_print()} method.}
 
 \item{topic_cols}{Character vector of column names to group into
-repeating topic headers; only used by the \code{"typst"} backend (see
-\code{render_backend_table()}).}
+repeating topic headers; only used by the \code{"typst"} backend under
+Quarto (see \code{render_backend_table()}).}
 }
 \value{
 \code{x}, invisibly
@@ -42,6 +42,10 @@ backend selected by the \code{tabtibble.backend} option ("markdown"
 is already a \code{gt}, \code{tinytable}, \code{flextable}, or \code{table1} object (see
 \code{new_tab_list()}) is printed via its own \code{knitr::knit_print()} method
 instead, regardless of \code{tabtibble.backend}, so a table the caller
-built with a specific package is rendered exactly as they built it.
+built with a specific package is rendered exactly as they built it;
+under R Markdown (see \code{detect_render_mode()}), \code{caption} is still
+shown for it, as a plain bold paragraph before the table, since there
+is no single API across those packages for adding a caption to an
+already-built object.
 
 }}

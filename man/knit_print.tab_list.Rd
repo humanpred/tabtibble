@@ -49,14 +49,23 @@ Print a tab_list
 }
 \details{
 Individual tables are printed with the \code{print_tabtibble()} S3 generic
-function. Each table is wrapped in a fenced Div with id \verb{#tbl-<label>}
-(Quarto's syntax for a crossreferenceable table from computational
-output), so \verb{@tbl-<label>} resolves and, when the report target is Typst,
-the table appears in a Typst \verb{#outline(target: figure.where(kind: "quarto-float-tbl"))} (the list of tables; that outline call belongs in
-the report template, not here). The caption is emitted once, as the
-Div's trailing paragraph, which Quarto promotes to the figure's caption;
-it is Typst/Pandoc-escaped (see \code{escape_typst()}) so caption text
-containing markup-significant characters renders literally.
+function. Under Quarto (see \code{detect_render_mode()}), each table is
+wrapped in a fenced Div with id \verb{#tbl-<label>} (Quarto's syntax for a
+crossreferenceable table from computational output), so \verb{@tbl-<label>}
+resolves and, when the report target is Typst, the table appears in a
+Typst \verb{#outline(target: figure.where(kind: "quarto-float-tbl"))} (the
+list of tables; that outline call belongs in the report template, not
+here). The caption is emitted once, as the Div's trailing paragraph,
+which Quarto promotes to the figure's caption; it is Typst/Pandoc-escaped
+(see \code{escape_typst()}) so caption text containing markup-significant
+characters renders literally.
+
+Under plain R Markdown, that Div is skipped: rendered by plain Pandoc
+(no Quarto filter to interpret it), it would show up as a literal,
+uncaptioned wrapper rather than a table figure. Instead, each table
+carries an ordinary caption the output target understands -- see
+\code{render_backend_table()} -- so a report that never used Quarto keeps
+working exactly as it did before crossref support was added.
 }
 \seealso{
 Other knitters:
