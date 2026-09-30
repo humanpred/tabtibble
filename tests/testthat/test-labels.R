@@ -38,6 +38,15 @@ test_that("derive_label falls back to the hash alone when the slug is empty", {
   expect_match(label, "^[0-9a-f]{6}$")
 })
 
+test_that("derive_label truncates a slug longer than 40 characters, with no trailing dash", {
+  caption <- paste(rep("word", 20), collapse = " ") # slugifies to 99 "word-word-..." characters
+  label <- derive_label(caption)
+  slug <- sub("-[0-9a-f]{6}$", "", label)
+  expect_true(nchar(slug) <= 40)
+  expect_false(endsWith(slug, "-"))
+  expect_no_error(validate_label(label))
+})
+
 # escape_typst(): one test per Typst/Pandoc-markdown-significant character,
 # per the contract. Each is verified to render literally end-to-end in
 # test-quarto-render.R; here we pin the exact escaped string.
