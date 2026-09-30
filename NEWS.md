@@ -1,4 +1,4 @@
-# tabtibble (development version)
+# tabtibble 0.0.2.9000
 
 * `knit_print()` now detects whether it is rendering under Quarto or plain
   R Markdown/knitr (`knitr::opts_knit$get("quarto.version")`, falling back

@@ -1,6 +1,6 @@
 Package: tabtibble
 Title: Simplify Reporting Many Tables
-Version: 0.0.1.9000
+Version: 0.0.2.9000
 Authors@R: 
     person("Bill", "Denney", email="wdenney@humanpredictions.com", role=c("aut", "cre"), comment=c(ORCID="0000-0002-5759-428X"))
 Description: Simplify reporting many tables by creating tibbles of tables. With
