@@ -24,14 +24,38 @@ rendered table with \code{cat()}.
 Emits a fenced \verb{\{=typst\}} block (which Quarto passes through verbatim)
 containing a \verb{#table(...)} whose column header repeats
 (\verb{table.header(repeat: true, ...)}) on every page the table continues
-onto. When \code{topic_cols} is non-empty, each distinct combination of topic
-values is additionally emitted once, as its own repeating header row
-(\code{table.header(level = 2, ...)} for the first topic column, \code{level = 3}
-for the second, and so on) spanning the data columns, immediately above
-its rows; \code{x} must already be sorted by \code{topic_cols} (\code{new_tab_tibble()}
-checks this). A topic header is never left alone at the bottom of a page
--- Typst keeps a \code{table.header} row with at least the row after it,
-verified against a render long enough to force the break. Without
-\code{topic_cols}, this is an ordinary repeating-header table.
+onto. A rule (\code{table.hline()}) closes the column header, so it repeats
+with it under the header on every page, and another ends the table: the
+rules frame the data. When \code{topic_cols} is non-empty, each distinct
+combination of topic values is additionally emitted once, as its own
+repeating header row (\code{table.header(level = 2, ...)} for the first topic
+column, \code{level = 3} for the second, and so on) spanning the data columns,
+immediately above its rows; \code{x} must already be sorted by \code{topic_cols}
+(\code{new_tab_tibble()} checks this). A topic header is never left alone at
+the bottom of a page -- Typst keeps a \code{table.header} row with at least the
+row after it, verified against a render long enough to force the break.
+Without \code{topic_cols}, this is an ordinary repeating-header table.
+}
+\details{
+Attributes of \code{x} adjust the table:
+\itemize{
+\item \code{"tabtibble_align"}: the column alignment; see \code{resolve_typst_align()}.
+\item \code{"tabtibble_widths"}: the column widths; see \code{resolve_typst_widths()}.
+\item \code{"tabtibble_header_cols"}: the number of leading data columns that
+label their rows; a vertical rule (\code{table.vline()}) separates them from
+the other columns.
+\item \code{"tabtibble_topic_labels"}: \code{TRUE} to show each topic header as
+"\if{html}{\out{<column name>}}: \if{html}{\out{<value>}}" instead of the value alone, so a topic row says
+what it is.
+\item \code{"tabtibble_typst_raw"}: the names of data columns whose cells are
+already Typst markup (for example \verb{$r^2$}); they are written as given,
+not escaped, so the caller escapes any literal text in them. The other
+backends do not read these attributes, so under them (and under the
+markdown fallback outside Quarto) a raw column is escaped like any
+other and its markup shows literally.
+}
+
+Column names, in the column header and in topic headers, are escaped like
+cell text.
 }
 \keyword{internal}

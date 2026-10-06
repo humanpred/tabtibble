@@ -60,20 +60,148 @@ resolve_typst_align <- function(x, align = NULL) {
   if (bold) sprintf("[*%s*]", label) else sprintf("[%s]", label)
 }
 
+#' Resolve per-column Typst column widths
+#'
+#' @param x A data.frame (the data columns only).
+#' @param widths `NULL` for Typst's automatic widths, or the
+#'   `"tabtibble_widths"` attribute: Typst track sizes (`"auto"`, a length
+#'   such as `"3cm"`, `".5in"`, or `"40%"`, or a fraction such as `"2fr"`),
+#'   either all named by column (each column once, no other names) or none
+#'   named, in column order.
+#' @returns The Typst `columns:` value: the number of columns when `widths`
+#'   is `NULL`, otherwise a Typst array of track sizes.
+#' @keywords internal
+resolve_typst_widths <- function(x, widths = NULL) {
+  cols <- names(x)
+  if (is.null(widths)) {
+    return(as.character(length(cols)))
+  }
+  if (!is.character(widths)) {
+    stop("`tabtibble_widths` must be a character vector of Typst track sizes.", call. = FALSE)
+  }
+  width_names <- names(widths)
+  if (!is.null(width_names)) {
+    if (any(is.na(width_names) | !nzchar(width_names))) {
+      stop("`tabtibble_widths` must name every width or none of them.", call. = FALSE)
+    }
+    dup <- unique(width_names[duplicated(width_names)])
+    if (length(dup) > 0) {
+      stop(sprintf("`tabtibble_widths` names column(s) more than once: %s", paste(sQuote(dup), collapse = ", ")), call. = FALSE)
+    }
+    unknown <- setdiff(width_names, cols)
+    if (length(unknown) > 0) {
+      stop(
+        sprintf("`tabtibble_widths` names column(s) that are not data columns: %s", paste(sQuote(unknown), collapse = ", ")),
+        call. = FALSE
+      )
+    }
+    missing_cols <- setdiff(cols, width_names)
+    if (length(missing_cols) > 0) {
+      stop(
+        sprintf("`tabtibble_widths` is missing an entry for column(s): %s", paste(sQuote(missing_cols), collapse = ", ")),
+        call. = FALSE
+      )
+    }
+    widths <- widths[cols]
+  } else if (length(widths) != length(cols)) {
+    stop("`tabtibble_widths` must be named, or the same length as the number of (non-topic) columns.", call. = FALSE)
+  }
+  valid <- !is.na(widths) & grepl("^(auto|([0-9]+(\\.[0-9]+)?|\\.[0-9]+)(pt|mm|cm|in|em|%|fr))$", widths)
+  if (!all(valid)) {
+    stop(
+      sprintf(
+        paste(
+          "`tabtibble_widths` values must be Typst track sizes (\"auto\", a length such as \"3cm\", \".5in\",",
+          "or \"40%%\", or a fraction such as \"2fr\"): %s"
+        ),
+        paste(sQuote(widths[!valid]), collapse = ", ")
+      ),
+      call. = FALSE
+    )
+  }
+  sprintf("(%s,)", paste(unname(widths), collapse = ", "))
+}
+
+#' Resolve the number of leading row-header columns
+#'
+#' @param x A data.frame (the data columns only).
+#' @param header_cols `NULL` (none), or the `"tabtibble_header_cols"`
+#'   attribute: the number of leading data columns that label their rows.
+#' @returns A single integer, `0` when there are none.
+#' @keywords internal
+resolve_typst_header_cols <- function(x, header_cols = NULL) {
+  if (is.null(header_cols)) {
+    return(0L)
+  }
+  ok <- is.numeric(header_cols) && length(header_cols) == 1 && !is.na(header_cols) &&
+    header_cols == round(header_cols) && header_cols >= 0 && header_cols < ncol(x)
+  if (!ok) {
+    if (ncol(x) == 0) {
+      stop("`tabtibble_header_cols` cannot be set on a table whose every column is a topic column.", call. = FALSE)
+    }
+    stop(
+      sprintf(
+        "`tabtibble_header_cols` must be a single whole number from 0 to %d (one less than the number of (non-topic) columns).",
+        ncol(x) - 1L
+      ),
+      call. = FALSE
+    )
+  }
+  as.integer(header_cols)
+}
+
+#' Resolve whether topic headers name their column
+#'
+#' @param topic_labels `NULL` (no), or the `"tabtibble_topic_labels"`
+#'   attribute: a single `TRUE` or `FALSE`.
+#' @returns `TRUE` or `FALSE`.
+#' @keywords internal
+resolve_typst_topic_labels <- function(topic_labels = NULL) {
+  if (is.null(topic_labels)) {
+    return(FALSE)
+  }
+  if (!is.logical(topic_labels) || length(topic_labels) != 1 || is.na(topic_labels)) {
+    stop("`tabtibble_topic_labels` must be a single TRUE or FALSE.", call. = FALSE)
+  }
+  topic_labels
+}
+
 #' Render a data.frame as a raw Typst table, with optional repeating topic headers
 #'
 #' Emits a fenced `{=typst}` block (which Quarto passes through verbatim)
 #' containing a `#table(...)` whose column header repeats
 #' (`table.header(repeat: true, ...)`) on every page the table continues
-#' onto. When `topic_cols` is non-empty, each distinct combination of topic
-#' values is additionally emitted once, as its own repeating header row
-#' (`table.header(level = 2, ...)` for the first topic column, `level = 3`
-#' for the second, and so on) spanning the data columns, immediately above
-#' its rows; `x` must already be sorted by `topic_cols` (`new_tab_tibble()`
-#' checks this). A topic header is never left alone at the bottom of a page
-#' -- Typst keeps a `table.header` row with at least the row after it,
-#' verified against a render long enough to force the break. Without
-#' `topic_cols`, this is an ordinary repeating-header table.
+#' onto. A rule (`table.hline()`) closes the column header, so it repeats
+#' with it under the header on every page, and another ends the table: the
+#' rules frame the data. When `topic_cols` is non-empty, each distinct
+#' combination of topic values is additionally emitted once, as its own
+#' repeating header row (`table.header(level = 2, ...)` for the first topic
+#' column, `level = 3` for the second, and so on) spanning the data columns,
+#' immediately above its rows; `x` must already be sorted by `topic_cols`
+#' (`new_tab_tibble()` checks this). A topic header is never left alone at
+#' the bottom of a page -- Typst keeps a `table.header` row with at least the
+#' row after it, verified against a render long enough to force the break.
+#' Without `topic_cols`, this is an ordinary repeating-header table.
+#'
+#' Attributes of `x` adjust the table:
+#'
+#' * `"tabtibble_align"`: the column alignment; see `resolve_typst_align()`.
+#' * `"tabtibble_widths"`: the column widths; see `resolve_typst_widths()`.
+#' * `"tabtibble_header_cols"`: the number of leading data columns that
+#'   label their rows; a vertical rule (`table.vline()`) separates them from
+#'   the other columns.
+#' * `"tabtibble_topic_labels"`: `TRUE` to show each topic header as
+#'   "<column name>: <value>" instead of the value alone, so a topic row says
+#'   what it is.
+#' * `"tabtibble_typst_raw"`: the names of data columns whose cells are
+#'   already Typst markup (for example `$r^2$`); they are written as given,
+#'   not escaped, so the caller escapes any literal text in them. The other
+#'   backends do not read these attributes, so under them (and under the
+#'   markdown fallback outside Quarto) a raw column is escaped like any
+#'   other and its markup shows literally.
+#'
+#' Column names, in the column header and in topic headers, are escaped like
+#' cell text.
 #'
 #' @param x A data.frame.
 #' @param topic_cols Character vector of column names (outer to inner) to
@@ -85,18 +213,38 @@ resolve_typst_align <- function(x, align = NULL) {
 #'   rendered table with `cat()`.
 #' @keywords internal
 render_typst_table <- function(x, topic_cols = character(0), ...) {
-  x <- escape_typst_df(x)
+  raw_cols <- attr(x, "tabtibble_typst_raw", exact = TRUE)
+  if (is.null(raw_cols)) {
+    raw_cols <- character(0)
+  }
+  topic_labels <- resolve_typst_topic_labels(attr(x, "tabtibble_topic_labels", exact = TRUE))
   data_cols <- setdiff(names(x), topic_cols)
+  bad_raw <- setdiff(raw_cols, data_cols)
+  if (length(bad_raw) > 0) {
+    stop(
+      sprintf("`tabtibble_typst_raw` names column(s) that are not data columns: %s", paste(sQuote(bad_raw), collapse = ", ")),
+      call. = FALSE
+    )
+  }
+  x_raw <- x[raw_cols]
+  x <- escape_typst_df(x)
+  x[raw_cols] <- x_raw
   n_col <- length(data_cols)
-  align <- resolve_typst_align(x[data_cols], attr(x, "tabtibble_align"))
+  align <- resolve_typst_align(x[data_cols], attr(x, "tabtibble_align", exact = TRUE))
+  columns <- resolve_typst_widths(x[data_cols], attr(x, "tabtibble_widths", exact = TRUE))
+  header_cols <- resolve_typst_header_cols(x[data_cols], attr(x, "tabtibble_header_cols", exact = TRUE))
+  topic_names <- escape_typst(topic_cols)
 
   cat("```{=typst}\n")
   cat("#table(\n")
-  cat("  columns: ", n_col, ",\n", sep = "")
+  cat("  columns: ", columns, ",\n", sep = "")
   cat("  align: (", paste(align, collapse = ", "), ",),\n", sep = "")
+  if (header_cols > 0) {
+    cat("  table.vline(x: ", header_cols, "),\n", sep = "")
+  }
   cat(
     "  table.header(repeat: true, ",
-    paste(vapply(data_cols, .typst_header_cell, character(1)), collapse = ", "), ",),\n",
+    paste(vapply(escape_typst(data_cols), .typst_header_cell, character(1)), collapse = ", "), ", table.hline(),),\n",
     sep = ""
   )
 
@@ -109,6 +257,9 @@ render_typst_table <- function(x, topic_cols = character(0), ...) {
       for (lvl in seq_along(topic_cols)) {
         if (changes[i, lvl]) {
           value <- .format_typst_cell(x[[topic_cols[[lvl]]]][i])
+          if (topic_labels) {
+            value <- paste0(topic_names[[lvl]], ": ", value)
+          }
           cat(
             "  table.header(level: ", lvl + 1L,
             ", table.cell(colspan: ", n_col, ")[*", value, "*]),\n",
@@ -120,6 +271,7 @@ render_typst_table <- function(x, topic_cols = character(0), ...) {
     cells <- vapply(data_cols, function(cn) .typst_cell(.format_typst_cell(x[[cn]][i])), character(1))
     cat("  ", paste(cells, collapse = ", "), ",\n", sep = "")
   }
+  cat("  table.hline(),\n")
   cat(")\n```\n")
   invisible(NULL)
 }

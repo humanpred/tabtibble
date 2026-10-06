@@ -34,6 +34,10 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
 
+      # The Quarto render tests compile the Typst backend's tables; without
+      # the quarto command-line tool they are skipped.
+      - uses: quarto-dev/quarto-actions/setup@v2
+
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}

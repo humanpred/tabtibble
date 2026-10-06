@@ -166,3 +166,71 @@ test_that("multiple backends each produce a crossreferenceable, captioned table"
   expect_match(txt, "Table 1", fixed = TRUE)
   expect_match(txt, "Table 2", fixed = TRUE)
 })
+
+test_that("a typst-backend table compiles with its rules, widths, row-header rule, topic labels, and raw cells", {
+  skip_quarto_tests()
+
+  txt <- render_typst_pdf(c(
+    "```{r echo=FALSE}",
+    "options(tabtibble.backend = 'typst')",
+    "d <- data.frame(",
+    "  Subject = c('S001', 'S002', 'S003'),",
+    "  Parameter = c('r.squared', 'lambda.z', 'none'),",
+    "  Name = c('$r^2$', '$lambda_z$', NA)",
+    ")",
+    "attr(d, 'tabtibble_header_cols') <- 1",
+    "attr(d, 'tabtibble_widths') <- c(Parameter = 'auto', Name = '1fr')",
+    "attr(d, 'tabtibble_topic_labels') <- TRUE",
+    "attr(d, 'tabtibble_typst_raw') <- 'Name'",
+    "d_tab <- new_tab_tibble(tibble::tibble(",
+    "  table = list(d),",
+    "  caption = 'A table with every attribute',",
+    "  label = 'attributes',",
+    "  topic_cols = list('Subject')",
+    "))",
+    "```",
+    "",
+    "```{r results='asis'}",
+    "knit_print(d_tab)",
+    "```"
+  ))
+
+  expect_match(txt, "A table with every attribute", fixed = TRUE)
+  expect_match(txt, "Subject: S001", fixed = TRUE)
+  expect_match(txt, "Subject: S003", fixed = TRUE)
+  # The math is typeset: its markup is not printed, and the symbols are.
+  expect_no_match(txt, "$", fixed = TRUE)
+  expect_no_match(txt, "lambda_z", fixed = TRUE)
+  # Typst sets math variables in mathematical italic (U+1D45F is r, U+1D706
+  # is lambda, U+1D467 is z).
+  expect_match(txt, "\U0001D45F2", fixed = TRUE)
+  expect_match(txt, "\U0001D706\U0001D467", fixed = TRUE)
+})
+
+test_that("a typst-backend table with rules and a row-header column repeats its header on every page", {
+  skip_quarto_tests()
+
+  pages <- render_typst_pdf_pages(c(
+    "```{r echo=FALSE}",
+    "options(tabtibble.backend = 'typst')",
+    "d <- data.frame(Row = sprintf('R%03d', 1:150), Value = 1:150)",
+    "attr(d, 'tabtibble_header_cols') <- 1",
+    "d_tab <- new_tab_tibble(tibble::tibble(",
+    "  table = list(d),",
+    "  caption = 'A long table with rules',",
+    "  label = 'longrules'",
+    "))",
+    "```",
+    "",
+    "```{r results='asis'}",
+    "knit_print(d_tab)",
+    "```"
+  ))
+
+  table_pages <- pages[grepl("R[0-9]{3}", pages)]
+  expect_gt(length(table_pages), 1)
+  for (page in table_pages) {
+    expect_match(page, "Row\\s+Value")
+  }
+  expect_match(paste(table_pages, collapse = "\n"), "R150", fixed = TRUE)
+})
