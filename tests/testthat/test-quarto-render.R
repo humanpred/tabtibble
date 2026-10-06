@@ -166,3 +166,35 @@ test_that("multiple backends each produce a crossreferenceable, captioned table"
   expect_match(txt, "Table 1", fixed = TRUE)
   expect_match(txt, "Table 2", fixed = TRUE)
 })
+
+test_that("a typst-backend table compiles with its rules, widths, row-header rule, topic labels, and raw cells", {
+  skip_quarto_tests()
+
+  txt <- render_typst_pdf(c(
+    "```{r echo=FALSE}",
+    "options(tabtibble.backend = 'typst')",
+    "d <- data.frame(Subject = c('S001', 'S002'), Parameter = c('r.squared', 'lambda.z'), Name = c('$r^2$', '$lambda_z$'))",
+    "attr(d, 'tabtibble_header_cols') <- 1",
+    "attr(d, 'tabtibble_widths') <- c('auto', '1fr')",
+    "attr(d, 'tabtibble_topic_labels') <- TRUE",
+    "attr(d, 'tabtibble_typst_raw') <- 'Name'",
+    "d_tab <- new_tab_tibble(tibble::tibble(",
+    "  table = list(d),",
+    "  caption = 'A table with every attribute',",
+    "  label = 'attributes',",
+    "  topic_cols = list('Subject')",
+    "))",
+    "```",
+    "",
+    "```{r results='asis'}",
+    "knit_print(d_tab)",
+    "```"
+  ))
+
+  expect_match(txt, "A table with every attribute", fixed = TRUE)
+  expect_match(txt, "Subject: S001", fixed = TRUE)
+  expect_match(txt, "Subject: S002", fixed = TRUE)
+  # The math is typeset, so its markup is not printed.
+  expect_no_match(txt, "$", fixed = TRUE)
+  expect_no_match(txt, "lambda_z", fixed = TRUE)
+})
