@@ -19,6 +19,9 @@
 <url><loc>https://humanpred.github.io/tabtibble/reference/render_backend_table.html</loc></url>
 <url><loc>https://humanpred.github.io/tabtibble/reference/render_typst_table.html</loc></url>
 <url><loc>https://humanpred.github.io/tabtibble/reference/resolve_typst_align.html</loc></url>
+<url><loc>https://humanpred.github.io/tabtibble/reference/resolve_typst_header_cols.html</loc></url>
+<url><loc>https://humanpred.github.io/tabtibble/reference/resolve_typst_topic_labels.html</loc></url>
+<url><loc>https://humanpred.github.io/tabtibble/reference/resolve_typst_widths.html</loc></url>
 <url><loc>https://humanpred.github.io/tabtibble/reference/tabtibble_missing_package_error.html</loc></url>
 <url><loc>https://humanpred.github.io/tabtibble/reference/validate_label.html</loc></url>
 <url><loc>https://humanpred.github.io/tabtibble/reference/validate_topic_cols.html</loc></url>

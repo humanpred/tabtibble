@@ -2,6 +2,15 @@
 
 ## tabtibble 0.0.2.9000
 
+- The `"typst"` backend frames each table’s data with a rule under the
+  column header (repeated with the header on every page) and one at the
+  end of the table. Attributes on a table adjust it further:
+  `tabtibble_header_cols` (the number of leading columns that label
+  their rows, separated from the rest by a vertical rule),
+  `tabtibble_widths` (Typst column widths, such as `"auto"`, `"3cm"`, or
+  `"2fr"`), `tabtibble_topic_labels` (`TRUE` shows each topic header as
+  “: ”), and `tabtibble_typst_raw` (columns whose cells are Typst
+  markup, such as `$r^2$`, written without escaping).
 - [`knit_print()`](https://rdrr.io/pkg/knitr/man/knit_print.html) now
   detects whether it is rendering under Quarto or plain R Markdown/knitr
   (`knitr::opts_knit$get("quarto.version")`, falling back to the
