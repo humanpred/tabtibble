@@ -49,7 +49,13 @@ the other columns.
 what it is.
 \item \code{"tabtibble_typst_raw"}: the names of data columns whose cells are
 already Typst markup (for example \verb{$r^2$}); they are written as given,
-not escaped, so the caller escapes any literal text in them.
+not escaped, so the caller escapes any literal text in them. The other
+backends do not read these attributes, so under them (and under the
+markdown fallback outside Quarto) a raw column is escaped like any
+other and its markup shows literally.
 }
+
+Column names, in the column header and in topic headers, are escaped like
+cell text.
 }
 \keyword{internal}

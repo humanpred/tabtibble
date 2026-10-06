@@ -129,6 +129,31 @@ test_that("markdown/tinytable/gt/flextable backends ignore topic_cols gracefully
   })
 })
 
+test_that("the other backends ignore the Typst-only attributes, and escape a raw column like any other", {
+  d <- data.frame(Parameter = c("r.squared", "lambda.z"), Name = c("$r^2$", NA), Value = 1:2)
+  attr(d, "tabtibble_header_cols") <- 1
+  attr(d, "tabtibble_widths") <- c("auto", "1fr", "auto")
+  attr(d, "tabtibble_topic_labels") <- TRUE
+  attr(d, "tabtibble_typst_raw") <- "Name"
+  with_tabtibble_render_mode("quarto", with_tabtibble_backend("markdown", {
+    out <- paste(capture.output(render_backend_table(d)), collapse = "\n")
+    expect_match(out, "\\$r^2\\$", fixed = TRUE)
+    expect_no_match(out, "vline", fixed = TRUE)
+  }))
+  # The typst backend falls back to markdown outside Quarto, escaping the raw
+  # column there too.
+  with_tabtibble_render_mode("rmarkdown", with_tabtibble_backend("typst", {
+    out <- paste(capture.output(render_backend_table(d)), collapse = "\n")
+    expect_match(out, "\\$r^2\\$", fixed = TRUE)
+  }))
+  for (backend in c("tinytable", "gt", "flextable")) {
+    skip_if_not_installed(backend)
+    with_tabtibble_render_mode("quarto", with_tabtibble_backend(backend, {
+      expect_no_error(utils::capture.output(render_backend_table(d)))
+    }))
+  }
+})
+
 test_that("emit_typst_breakable_figure_rule emits the expected raw block", {
   out <- capture.output(emit_typst_breakable_figure_rule())
   expect_identical(
@@ -220,7 +245,68 @@ test_that("resolve_typst_widths refuses widths that are missing, the wrong lengt
   expect_error(resolve_typst_widths(d, c(a = "auto")), regexp = "missing an entry for column\\(s\\): 'b'")
   expect_error(resolve_typst_widths(d, "auto"), regexp = "must be named, or the same length")
   expect_error(resolve_typst_widths(d, c("auto", "wide")), regexp = "must be Typst track sizes.*'wide'")
+  expect_error(resolve_typst_widths(d, c("auto", NA)), regexp = "must be Typst track sizes.*NA")
+  expect_error(resolve_typst_widths(d, c(1, 2)), regexp = "must be a character vector")
   expect_identical(resolve_typst_widths(d, NULL), "2")
+})
+
+test_that("resolve_typst_widths takes every name or none, each a data column once", {
+  d <- data.frame(a = 1, b = 2)
+  # A partly named vector is refused, not read by its names alone.
+  expect_error(resolve_typst_widths(d, c(a = "1fr", "2fr")), regexp = "`tabtibble_widths` must name every width or none")
+  # A name that is not a column is named in the error, even beside a
+  # missing column.
+  expect_error(
+    resolve_typst_widths(d, c(a = "1fr", z = "2fr")),
+    regexp = "`tabtibble_widths` names column\\(s\\) that are not data columns: 'z'"
+  )
+  expect_error(
+    resolve_typst_widths(d, c(a = "1fr", b = "2fr", c = "auto")),
+    regexp = "not data columns: 'c'"
+  )
+  expect_error(
+    resolve_typst_widths(d, c(a = "1fr", a = "2fr", b = "auto")),
+    regexp = "`tabtibble_widths` names column\\(s\\) more than once: 'a'"
+  )
+})
+
+test_that("resolve_typst_widths accepts lengths and fractions with or without a leading zero", {
+  d <- data.frame(a = 1, b = 2, c = 3, d = 4)
+  expect_identical(resolve_typst_widths(d, c(".5cm", "0.5fr", "12.25pt", "auto")), "(.5cm, 0.5fr, 12.25pt, auto,)")
+  expect_error(resolve_typst_widths(d, c("5.cm", "1fr", "1fr", "1fr")), regexp = "'5.cm'")
+})
+
+test_that("render_typst_table refuses a tabtibble_topic_labels that is not a single TRUE or FALSE", {
+  d <- data.frame(subject = "S1", value = 1)
+  for (bad in list("yes", 1, NA, c(TRUE, TRUE), logical(0))) {
+    attr(d, "tabtibble_topic_labels") <- bad
+    expect_error(
+      render_typst_table(d, topic_cols = "subject"),
+      regexp = "`tabtibble_topic_labels` must be a single TRUE or FALSE"
+    )
+  }
+  attr(d, "tabtibble_topic_labels") <- FALSE
+  expect_identical(
+    capture.output(render_typst_table(d, topic_cols = "subject"))[6],
+    "  table.header(level: 2, table.cell(colspan: 1)[*S1*]),"
+  )
+})
+
+test_that("render_typst_table escapes column names in the column header and in topic headers", {
+  d <- data.frame(`Sub_ject` = "S1", `AUC*` = 1, `Cmax#1` = 2, check.names = FALSE)
+  attr(d, "tabtibble_topic_labels") <- TRUE
+  out <- capture.output(render_typst_table(d, topic_cols = "Sub_ject"))
+  expect_identical(out[5], "  table.header(repeat: true, [*AUC\\**], [*Cmax\\#1*], table.hline(),),")
+  expect_identical(out[6], "  table.header(level: 2, table.cell(colspan: 2)[*Sub\\_ject: S1*]),")
+})
+
+test_that("resolve_typst_header_cols says so when every column is a topic column", {
+  d <- data.frame(subject = "S1")
+  attr(d, "tabtibble_header_cols") <- 1
+  expect_error(
+    render_typst_table(d, topic_cols = "subject"),
+    regexp = "`tabtibble_header_cols` cannot be set on a table whose every column is a topic column"
+  )
 })
 
 test_that("render_typst_table names each topic header's column with tabtibble_topic_labels", {

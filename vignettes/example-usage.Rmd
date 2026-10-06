@@ -152,3 +152,43 @@ d_tab_topic_aligned <-
   tibble::tibble(table = list(conc), caption = "Aligned columns", topic_cols = list("subject")) %>%
   new_tab_tibble()
 ```
+
+The `"typst"` backend frames the data of every table with a rule under the
+column header, which repeats with the header on every page, and a rule at
+the end of the table. Four more attributes on the table adjust it; the
+other backends ignore them.
+
+`tabtibble_header_cols` is the number of leading columns that label their
+rows; a vertical rule separates them from the rest:
+
+```{r header-cols-example}
+params <- tibble::tibble(Parameter = c("cmax", "tmax"), Value = c(5.2, 1.0))
+attr(params, "tabtibble_header_cols") <- 1
+```
+
+`tabtibble_widths` sets the column widths as Typst track sizes: `"auto"`, a
+length such as `"3cm"` or `".5in"`, or a fraction of the remaining width
+such as `"2fr"`. Name every column, or give the widths in column order:
+
+```{r widths-example}
+attr(params, "tabtibble_widths") <- c(Parameter = "auto", Value = "1fr")
+```
+
+`tabtibble_topic_labels = TRUE` shows each topic header as
+"<column name>: <value>" (here "subject: S001") rather than the value alone,
+so a topic row says what it is:
+
+```{r topic-labels-example}
+attr(conc, "tabtibble_topic_labels") <- TRUE
+```
+
+`tabtibble_typst_raw` names columns whose cells are Typst markup, such as an
+equation, written without escaping. Any literal text in those cells must be
+escaped by the caller. Under the other backends, and under the markdown
+fallback outside Quarto, the column is escaped like any other, so its markup
+shows as text:
+
+```{r typst-raw-example}
+names_tab <- tibble::tibble(Parameter = c("r.squared", "lambda.z"), Name = c("$r^2$", "$lambda_z$"))
+attr(names_tab, "tabtibble_typst_raw") <- "Name"
+```

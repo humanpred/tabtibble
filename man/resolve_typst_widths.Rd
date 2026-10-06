@@ -11,8 +11,9 @@ resolve_typst_widths(x, widths = NULL)
 
 \item{widths}{\code{NULL} for Typst's automatic widths, or the
 \code{"tabtibble_widths"} attribute: Typst track sizes (\code{"auto"}, a length
-such as \code{"3cm"} or \code{"40\%"}, or a fraction such as \code{"2fr"}), either named
-by column or in column order.}
+such as \code{"3cm"}, \code{".5in"}, or \code{"40\%"}, or a fraction such as \code{"2fr"}),
+either all named by column (each column once, no other names) or none
+named, in column order.}
 }
 \value{
 The Typst \verb{columns:} value: the number of columns when \code{widths}
