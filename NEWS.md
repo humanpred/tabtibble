@@ -1,4 +1,4 @@
-# tabtibble 0.0.2.9000
+# tabtibble 0.0.2.9001
 
 * The `"typst"` backend frames each table's data with a rule under the
   column header (repeated with the header on every page) and one at the end
