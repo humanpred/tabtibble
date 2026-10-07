@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tabtibble</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.2.9000" id="tabtibble-0029000">tabtibble 0.0.2.9000<a class="anchor" aria-label="anchor" href="#tabtibble-0029000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.2.9001" id="tabtibble-0029001">tabtibble 0.0.2.9001<a class="anchor" aria-label="anchor" href="#tabtibble-0029001"></a></h2>
 <ul><li>The <code>"typst"</code> backend frames each table’s data with a rule under the column header (repeated with the header on every page) and one at the end of the table. Attributes on a table adjust it further: <code>tabtibble_header_cols</code> (the number of leading columns that label their rows, separated from the rest by a vertical rule), <code>tabtibble_widths</code> (Typst column widths, such as <code>"auto"</code>, <code>"3cm"</code>, or <code>"2fr"</code>), <code>tabtibble_topic_labels</code> (<code>TRUE</code> shows each topic header as “<column name>: <value>”), and <code>tabtibble_typst_raw</code> (columns whose cells are Typst markup, such as <code>$r^2$</code>, written without escaping).</value></column></li>
 <li>
 <code><a href="https://rdrr.io/pkg/knitr/man/knit_print.html" class="external-link">knit_print()</a></code> now detects whether it is rendering under Quarto or plain R Markdown/knitr (<code>knitr::opts_knit$get("quarto.version")</code>, falling back to the <code>QUARTO_PROJECT_ROOT</code>/<code>QUARTO_DOCUMENT_PATH</code> environment variables). Under Quarto, behavior is unchanged: each table keeps its crossref div (the <code>"typst"</code> backend only makes sense there, and now falls back to the <code>"markdown"</code> backend outside Quarto). Under plain R Markdown, that div is skipped – rendered by plain Pandoc it would show up as literal, uncaptioned text – and each table instead gets an ordinary caption the output target understands: <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code>’s own <code>caption</code> for the markdown backend (in its native format for the detected target – <code><a href="../reference/detect_output_target.html">detect_output_target()</a></code> reports <code>"typst"</code>, <code>"latex"</code>, <code>"html"</code>, <code>"docx"</code>, or <code>"other"</code> – rather than always a Markdown pipe table), or <code>tinytable</code>/<code>gt</code>/<code>flextable</code>’s own captioning. This keeps older Rmd reports working. New <code>tabtibble.render_mode</code> and <code>tabtibble.output_target</code> options force the detected mode/target (mainly for tests, or when detection is wrong for some environment).</li>
